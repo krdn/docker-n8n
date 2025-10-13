@@ -1,0 +1,16 @@
+[Unit]
+Description=n8n Backup Timer
+Requires=n8n-backup.service
+
+[Timer]
+# Run daily at 2:00 AM
+OnCalendar=*-*-* 02:00:00
+
+# Run 5 minutes after boot if the last scheduled run was missed
+Persistent=true
+
+# Randomize start time by up to 15 minutes
+RandomizedDelaySec=15m
+
+[Install]
+WantedBy=timers.target

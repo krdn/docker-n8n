@@ -1,0 +1,23 @@
+[Unit]
+Description=n8n Backup Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=gon
+Group=gon
+WorkingDirectory=/home/gon/docker-n8n
+ExecStart=/home/gon/docker-n8n/scripts/backup.sh
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=n8n-backup
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=n8n Auto Update Timer
+Requires=n8n-update.service
+
+[Timer]
+# Run weekly on Sunday at 3:00 AM
+OnCalendar=Sun *-*-* 03:00:00
+
+# Run 5 minutes after boot if the last scheduled run was missed
+Persistent=true
+
+# Randomize start time by up to 30 minutes to avoid load spikes
+RandomizedDelaySec=30m
+
+[Install]
+WantedBy=timers.target
