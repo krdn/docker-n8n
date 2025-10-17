@@ -122,7 +122,7 @@ services:
       - n8n-network
 
     healthcheck:
-      test: ["CMD", "pgrep", "-f", "n8n worker"]
+      test: ["CMD-SHELL", "pgrep -f 'n8n worker' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -166,7 +166,7 @@ services:
     container_name: n8n-redis
     restart: unless-stopped
 
-    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
+    command: redis-server --appendonly yes --appendfsync everysec --maxmemory 1gb --maxmemory-policy allkeys-lru
 
     volumes:
       - ./data/redis:/data

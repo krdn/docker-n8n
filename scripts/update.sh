@@ -39,6 +39,27 @@ mkdir -p "$BACKUP_DIR" "$PROJECT_DIR/logs"
 # Navigate to project directory
 cd "$PROJECT_DIR"
 
+# Load and validate environment variables
+if [ -f ".env" ]; then
+    source .env
+
+    # Validate critical environment variables
+    if [ -z "$N8N_ENCRYPTION_KEY" ]; then
+        error "N8N_ENCRYPTION_KEY is not set in .env file!"
+        exit 1
+    fi
+
+    if [ -z "$POSTGRES_PASSWORD" ]; then
+        error "POSTGRES_PASSWORD is not set in .env file!"
+        exit 1
+    fi
+
+    log "Environment variables validated successfully"
+else
+    error ".env file not found in $PROJECT_DIR"
+    exit 1
+fi
+
 log "========================================="
 log "Starting n8n update process"
 log "========================================="
@@ -115,12 +136,48 @@ else
     error "Attempting to restore from backup..."
 
     # Restore backup if startup fails
-    if [ -f "${BACKUP_FILE}.gz" ]; then
-        gunzip "${BACKUP_FILE}.gz"
+    COMPRESSED_BACKUP="${BACKUP_FILE}.gz"
+    if [ -f "$COMPRESSED_BACKUP" ]; then
+        log "Found backup: $COMPRESSED_BACKUP"
+
+        # Stop all services
+        docker-compose down
+
+        # Decompress backup
+        gunzip -c "$COMPRESSED_BACKUP" > "${BACKUP_FILE}.restore"
+
+        # Start only PostgreSQL
+        log "Starting PostgreSQL for restore..."
         docker-compose up -d postgres
-        sleep 10
-        docker-compose exec -T postgres psql -U n8n -d n8n < "$BACKUP_FILE"
+
+        # Wait for PostgreSQL to be ready
+        RETRY=0
+        while [ $RETRY -lt 30 ]; do
+            if docker-compose exec -T postgres pg_isready -U n8n > /dev/null 2>&1; then
+                log "PostgreSQL is ready"
+                break
+            fi
+            RETRY=$((RETRY + 1))
+            sleep 2
+        done
+
+        # Drop and recreate database
+        log "Restoring database from backup..."
+        docker-compose exec -T postgres psql -U n8n -d postgres -c "DROP DATABASE IF EXISTS n8n;"
+        docker-compose exec -T postgres psql -U n8n -d postgres -c "CREATE DATABASE n8n;"
+        docker-compose exec -T postgres psql -U n8n -d n8n < "${BACKUP_FILE}.restore"
+
+        # Clean up restore file
+        rm -f "${BACKUP_FILE}.restore"
+
+        # Restart all services
+        log "Restarting all services..."
         docker-compose up -d
+
+        error "Services restored from backup. Please check the logs."
+    else
+        error "No backup file found at $COMPRESSED_BACKUP"
+        error "Manual intervention required!"
     fi
     exit 1
 fi

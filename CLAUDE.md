@@ -9,7 +9,7 @@ This is a **production-ready n8n deployment** using Docker Compose with a queue-
 - **n8n main service**: Web UI and API (port 5678, localhost only)
 - **n8n-worker**: Background worker for executing workflows via Redis queue
 - **PostgreSQL 16**: Primary database for workflow data and executions
-- **Redis 7**: Queue management with LRU eviction policy (512MB limit)
+- **Redis 7**: Queue management with LRU eviction policy (1GB limit)
 - **System Nginx**: Reverse proxy (NOT containerized) with SSL/TLS termination
 
 **Key architectural decision**: Queue mode (`EXECUTIONS_MODE=queue`) allows horizontal scaling of workers. The main n8n service handles UI/API while workers process workflows asynchronously.
@@ -142,9 +142,9 @@ n8n-worker:
 ```
 
 ### Redis Memory
-Current limit: 512MB with `allkeys-lru` eviction. Adjust in `docker-compose.yml`:
+Current limit: 1GB with `allkeys-lru` eviction and `everysec` fsync. Adjust in `docker-compose.yml`:
 ```yaml
-command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
+command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru --appendfsync everysec
 ```
 
 ### PostgreSQL Tuning
