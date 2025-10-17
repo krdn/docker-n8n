@@ -44,6 +44,9 @@ services:
       # Workers
       - N8N_METRICS=true
 
+      # Node.js Built-in Modules
+      - NODE_FUNCTION_ALLOW_BUILTIN=crypto,os,fs
+
     ports:
       - "127.0.0.1:5678:5678"
 
@@ -99,6 +102,9 @@ services:
       - QUEUE_BULL_REDIS_PORT=6379
       - QUEUE_BULL_REDIS_DB=${REDIS_DB:-0}
       - QUEUE_HEALTH_CHECK_ACTIVE=true
+
+      # Node.js Built-in Modules
+      - NODE_FUNCTION_ALLOW_BUILTIN=crypto,os,fs
 
     volumes:
       - ./data/n8n:/home/node/.n8n
@@ -160,7 +166,7 @@ services:
     container_name: n8n-redis
     restart: unless-stopped
 
-    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
 
     volumes:
       - ./data/redis:/data
