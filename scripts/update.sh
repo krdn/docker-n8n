@@ -88,11 +88,9 @@ else
     warning "Database backup failed or database is not running"
 fi
 
-# Keep only last 7 backups
-log "Cleaning old backups (keeping last 7)..."
-cd "$BACKUP_DIR"
-ls -t n8n_backup_*.sql.gz 2>/dev/null | tail -n +8 | xargs -r rm -f
-cd "$PROJECT_DIR"
+# Keep only last 30 days of update backups (aligned with backup.sh policy)
+log "Cleaning old backups (keeping last 30 days)..."
+find "$BACKUP_DIR" -name "n8n_backup_*.sql.gz" -type f -mtime +30 -delete 2>/dev/null || true
 
 # Pull latest images
 log "Pulling latest Docker images..."

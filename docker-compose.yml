@@ -14,6 +14,9 @@ services:
       - NODE_ENV=production
       - WEBHOOK_URL=${WEBHOOK_URL}
 
+      # Proxy Settings
+      - N8N_PROXY_HOPS=${N8N_PROXY_HOPS:-1}
+
       # Timezone
       - GENERIC_TIMEZONE=${TIMEZONE}
       - TZ=${TIMEZONE}
@@ -139,8 +142,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - PGDATA=/var/lib/postgresql/data/pgdata
 
-    ports:
-      - "127.0.0.1:5432:5432"
+    # Port binding removed for security - use SSH tunnel if external access needed
+    # Example: ssh -L 5432:localhost:5432 user@server
+    # ports:
+    #   - "127.0.0.1:5432:5432"
 
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
