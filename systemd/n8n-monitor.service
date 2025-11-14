@@ -1,0 +1,23 @@
+[Unit]
+Description=n8n Health Monitoring Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=gon
+Group=gon
+WorkingDirectory=/home/gon/docker-n8n
+ExecStart=/home/gon/docker-n8n/scripts/monitor.sh
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=n8n-monitor
+
+[Install]
+WantedBy=multi-user.target
