@@ -50,6 +50,13 @@ services:
       # Node.js Built-in Modules
       - NODE_FUNCTION_ALLOW_BUILTIN=crypto,os,fs
 
+      # Task Runners and Security Settings
+      - N8N_RUNNERS_ENABLED=${N8N_RUNNERS_ENABLED:-true}
+      - OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=${OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS:-true}
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=${N8N_BLOCK_ENV_ACCESS_IN_NODE:-false}
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=${N8N_GIT_NODE_DISABLE_BARE_REPOS:-true}
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS:-true}
+
     ports:
       - "127.0.0.1:5678:5678"
 
@@ -109,6 +116,12 @@ services:
       # Node.js Built-in Modules
       - NODE_FUNCTION_ALLOW_BUILTIN=crypto,os,fs
 
+      # Task Runners and Security Settings
+      - N8N_RUNNERS_ENABLED=${N8N_RUNNERS_ENABLED:-true}
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=${N8N_BLOCK_ENV_ACCESS_IN_NODE:-false}
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=${N8N_GIT_NODE_DISABLE_BARE_REPOS:-true}
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS:-true}
+
     volumes:
       - ./data/n8n:/home/node/.n8n
       - ./data/local-files:/files
@@ -126,7 +139,6 @@ services:
 
     healthcheck:
       test: ["CMD-SHELL", "pgrep -f 'n8n worker' || exit 1"]
-      test: ["CMD-SHELL", "pgrep -f 'n8n worker' > /dev/null || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -186,6 +198,17 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  vscode:
+    image: codercom/code-server
+    container_name: vscode
+    restart: unless-stopped
+    environment:
+      - PASSWORD=your_password # Please change this
+    volumes:
+      - ./data/vscode:/home/coder/project
+    networks:
+      - n8n-network
 
 networks:
   n8n-network:
