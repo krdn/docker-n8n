@@ -12,7 +12,7 @@ echo ""
 
 # 서버 정보
 SERVER_IP="192.168.0.50"
-SERVER_DOMAIN="krdn-n8n.duckdns.org"
+SERVER_DOMAIN="n8n.krdn.kr"
 SSH_USER="gon"
 SSH_PORT="22"
 PG_PORT="5432"
@@ -92,7 +92,7 @@ from sshtunnel import SSHTunnelForwarder
 import psycopg2
 
 with SSHTunnelForwarder(
-    ('krdn-n8n.duckdns.org', 22),
+    ('n8n.krdn.kr', 22),
     ssh_username='gon',
     ssh_password='YOUR_SSH_PASSWORD',  # 또는 ssh_pkey='/path/to/key'
     remote_bind_address=('localhost', 5432)

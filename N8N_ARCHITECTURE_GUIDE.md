@@ -42,8 +42,8 @@ GET  /api/v1/executions       # 실행 이력 조회
 #### 3. Webhook 엔드포인트
 ```
 # 외부 서비스가 n8n 워크플로우 트리거
-https://krdn-n8n.duckdns.org/webhook/uuid-here
-https://krdn-n8n.duckdns.org/webhook-test/uuid-here
+https://n8n.krdn.kr/webhook/uuid-here
+https://n8n.krdn.kr/webhook-test/uuid-here
 ```
 
 #### 4. Queue Producer (작업 생성자)
@@ -53,7 +53,7 @@ https://krdn-n8n.duckdns.org/webhook-test/uuid-here
 
 #### 5. 메인 서비스 전용 환경변수
 ```yaml
-- N8N_HOST=krdn-n8n.duckdns.org    # 도메인 설정
+- N8N_HOST=n8n.krdn.kr    # 도메인 설정
 - N8N_PORT=5678                     # 웹 서버 포트
 - WEBHOOK_URL=https://...           # Webhook URL
 - N8N_BASIC_AUTH_ACTIVE=false       # 인증 설정
@@ -154,7 +154,7 @@ Redis Queue → Worker가 작업 가져옴 → 워크플로우 실행
 
 **1단계: Webhook 수신 (n8n 메인)**
 ```bash
-외부 서비스 → POST https://krdn-n8n.duckdns.org/webhook/abc123
+외부 서비스 → POST https://n8n.krdn.kr/webhook/abc123
              ↓
           Nginx → n8n 메인 (5678)
                    ↓

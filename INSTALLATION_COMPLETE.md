@@ -17,7 +17,7 @@
 - ✅ Certbot - SSL 자동 갱신 활성화
 
 ### 3. SSL/TLS 인증서
-- ✅ 도메인: krdn-n8n.duckdns.org
+- ✅ 도메인: n8n.krdn.kr
 - ✅ 인증서 발급 완료
 - ✅ 만료일: 2026-01-11
 - ✅ 자동 갱신: 활성화됨
@@ -35,7 +35,7 @@
 ## 접속 정보
 
 ### 웹 인터페이스
-- URL: https://krdn-n8n.duckdns.org
+- URL: https://n8n.krdn.kr
 - 프로토콜: HTTPS (SSL/TLS 보안)
 
 ### 데이터베이스
@@ -253,7 +253,7 @@ docker-compose exec postgres pg_isready -U n8n
 
 ## 다음 단계
 
-1. ✅ https://krdn-n8n.duckdns.org 접속
+1. ✅ https://n8n.krdn.kr 접속
 2. ✅ 관리자 계정 생성
 3. ✅ 첫 워크플로우 만들기
 4. ⚠️ .env 파일의 비밀번호 변경 (강력 권장)

@@ -186,15 +186,15 @@ sudo nginx -t
 
 ```bash
 # DNS 확인
-nslookup krdn-n8n.duckdns.org
+nslookup n8n.krdn.kr
 
 # Let's Encrypt 인증서 발급 (standalone 모드)
 sudo systemctl stop nginx
-sudo certbot certonly --standalone -d krdn-n8n.duckdns.org
+sudo certbot certonly --standalone -d n8n.krdn.kr
 sudo systemctl start nginx
 
 # 또는 nginx 플러그인 사용
-sudo certbot --nginx -d krdn-n8n.duckdns.org
+sudo certbot --nginx -d n8n.krdn.kr
 ```
 
 ### 6.3 Nginx 시작
@@ -237,10 +237,10 @@ sudo systemctl list-timers n8n-*
 docker compose ps
 
 # 2. HTTPS 접속 테스트
-curl -I https://krdn-n8n.duckdns.org
+curl -I https://n8n.krdn.kr
 
 # 3. 브라우저에서 확인
-# https://krdn-n8n.duckdns.org 접속
+# https://n8n.krdn.kr 접속
 
 # 4. 워크플로우 확인
 # - 기존 워크플로우 목록 확인

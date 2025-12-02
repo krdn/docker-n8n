@@ -97,8 +97,8 @@ n8n-worker     Up (healthy)   5678/tcp
 
 ### 환경 변수 확인
 ```
-N8N_HOST=krdn-n8n.duckdns.org
-WEBHOOK_URL=https://krdn-n8n.duckdns.org
+N8N_HOST=n8n.krdn.kr
+WEBHOOK_URL=https://n8n.krdn.kr
 N8N_PROXY_HOPS=1  ✅ (새로 추가됨)
 ```
 

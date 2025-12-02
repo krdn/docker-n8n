@@ -171,9 +171,9 @@ host    all             all             172.16.0.0/12           trust
 
 **.env**:
 ```bash
-N8N_HOST=krdn-n8n.duckdns.org
+N8N_HOST=n8n.krdn.kr
 N8N_PROTOCOL=https
-WEBHOOK_URL=https://krdn-n8n.duckdns.org
+WEBHOOK_URL=https://n8n.krdn.kr
 TIMEZONE=Asia/Seoul
 
 POSTGRES_DB=n8n

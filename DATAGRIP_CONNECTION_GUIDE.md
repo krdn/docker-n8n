@@ -8,7 +8,7 @@ Windows 11 + DataGrip 환경에서 SSH 터널을 통해 Docker PostgreSQL에 연
 
 ```
 서버 정보:
-- SSH Host: krdn-n8n.duckdns.org
+- SSH Host: n8n.krdn.kr
 - SSH Port: 22
 - SSH User: gon
 
@@ -64,7 +64,7 @@ URL: jdbc:postgresql://localhost:5432/n8n
    ☑ Use SSH tunnel
 
    [SSH Configuration]
-   Host: krdn-n8n.duckdns.org
+   Host: n8n.krdn.kr
    Port: 22
    User name: gon
    Authentication type: Password (또는 Key pair)
@@ -137,7 +137,7 @@ URL: jdbc:postgresql://localhost:5432/n8n
 │   ☑ Use SSH tunnel                                     │
 │                                                         │
 │   Proxy host:                                          │
-│     Host: krdn-n8n.duckdns.org                        │
+│     Host: n8n.krdn.kr                        │
 │     Port: 22                                           │
 │     User name: gon                                     │
 │     Authentication type: [Password ▼]                  │
@@ -162,7 +162,7 @@ URL: jdbc:postgresql://localhost:5432/n8n
 **해결**:
 1. Windows PowerShell에서 SSH 연결 테스트:
    ```powershell
-   ssh gon@krdn-n8n.duckdns.org
+   ssh gon@n8n.krdn.kr
    ```
 
 2. 방화벽 확인:
@@ -170,7 +170,7 @@ URL: jdbc:postgresql://localhost:5432/n8n
 
 3. 인터넷 연결 확인:
    ```powershell
-   ping krdn-n8n.duckdns.org
+   ping n8n.krdn.kr
    ```
 
 ---
@@ -190,7 +190,7 @@ URL: jdbc:postgresql://localhost:5432/n8n
 
 3. PowerShell에서 수동 연결 테스트:
    ```powershell
-   ssh -v gon@krdn-n8n.duckdns.org
+   ssh -v gon@n8n.krdn.kr
    # verbose 모드로 자세한 오류 확인
    ```
 
@@ -245,10 +245,10 @@ DataGrip 설정 전에 SSH 터널이 정상 작동하는지 확인:
 
 ```powershell
 # 1. SSH 연결 테스트
-ssh gon@krdn-n8n.duckdns.org "echo 'SSH OK'"
+ssh gon@n8n.krdn.kr "echo 'SSH OK'"
 
 # 2. SSH 터널 생성 (이 창은 열어둔 채로)
-ssh -L 5432:localhost:5432 gon@krdn-n8n.duckdns.org
+ssh -L 5432:localhost:5432 gon@n8n.krdn.kr
 
 # 3. 새 PowerShell 창에서 포트 확인
 Test-NetConnection localhost -Port 5432
@@ -333,7 +333,7 @@ SELECT COUNT(*) as execution_count FROM execution_entity;
 ### **여러 환경 관리**
 
 ```
-Production: n8n Production DB (SSH: krdn-n8n.duckdns.org)
+Production: n8n Production DB (SSH: n8n.krdn.kr)
 Local Dev: n8n Local Dev (Direct: localhost:5432)
 ```
 
@@ -349,7 +349,7 @@ DataGrip 설정:
 Windows에서 `C:\Users\[사용자명]\.ssh\config` 파일 생성:
 
 ```
-Host krdn-n8n.duckdns.org
+Host n8n.krdn.kr
     ServerAliveInterval 60
     ServerAliveCountMax 3
     TCPKeepAlive yes
@@ -361,7 +361,7 @@ Host krdn-n8n.duckdns.org
 
 DataGrip 연결 전 확인사항:
 
-- [ ] SSH로 서버 접속 가능 확인 (`ssh gon@krdn-n8n.duckdns.org`)
+- [ ] SSH로 서버 접속 가능 확인 (`ssh gon@n8n.krdn.kr`)
 - [ ] PostgreSQL 컨테이너 실행 중 (서버에서 `docker-compose ps`)
 - [ ] 방화벽에서 SSH(22) 포트 허용
 - [ ] DataGrip의 PostgreSQL 드라이버 설치됨
@@ -381,6 +381,6 @@ DataGrip 연결 전 확인사항:
 ---
 
 **작성일**: 2025-10-13
-**서버**: krdn-n8n.duckdns.org
+**서버**: n8n.krdn.kr
 **PostgreSQL 버전**: 16-alpine
 **n8n 버전**: 1.114.4

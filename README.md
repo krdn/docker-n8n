@@ -10,7 +10,7 @@
   - 아키텍처: 큐 기반 마이크로서비스 (Queue Mode)
   - 현재 버전: n8n 1.115.3
   - 배포 방식: Docker Compose
-  - 도메인: krdn-n8n.duckdns.org
+  - 도메인: n8n.krdn.kr
   - 상태: ✅ 완전 가동 중 (모든 서비스 healthy)
 
   ---
@@ -206,7 +206,7 @@
 
   외부 접근 흐름
 
-  1. 사용자 → https://krdn-n8n.duckdns.org
+  1. 사용자 → https://n8n.krdn.kr
   2. Let's Encrypt SSL/TLS 인증서로 암호화
   3. Nginx (호스트의 443 포트)
   4. 프록시 패스 → http://127.0.0.1:5678
@@ -240,7 +240,7 @@
   2. SSL/TLS 인증서
 
   발급 기관: Let's Encrypt
-  도메인: krdn-n8n.duckdns.org
+  도메인: n8n.krdn.kr
   키 타입: ECDSA
   만료일: 2026-01-11 (85일 남음)
   자동 갱신: Certbot systemd timer
@@ -399,9 +399,9 @@
   .env 파일 구조
 
   # ===== 도메인 설정 =====
-  N8N_HOST=krdn-n8n.duckdns.org
+  N8N_HOST=n8n.krdn.kr
   N8N_PROTOCOL=https
-  WEBHOOK_URL=https://krdn-n8n.duckdns.org
+  WEBHOOK_URL=https://n8n.krdn.kr
 
   # ===== 타임존 =====
   TIMEZONE=Asia/Seoul
