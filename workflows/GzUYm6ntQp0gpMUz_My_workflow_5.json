@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2025-11-21T14:03:08.001Z",
+  "createdAt": "2025-11-21T14:02:48.723Z",
+  "id": "GzUYm6ntQp0gpMUz",
+  "name": "My workflow 5",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 20
+            },
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -192,
+        16
+      ],
+      "id": "e0b00a1d-5187-48a3-a057-cf46bdc4033a",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "d039a794-6561-41ae-bb1b-a8a2d1fa4a76",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T14:02:48.723Z",
+      "createdAt": "2025-11-21T14:02:48.723Z",
+      "role": "workflow:owner",
+      "workflowId": "GzUYm6ntQp0gpMUz",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

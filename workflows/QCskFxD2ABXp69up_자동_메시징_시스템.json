@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2025-11-22T09:49:04.360Z",
+  "createdAt": "2025-11-22T09:27:18.383Z",
+  "id": "QCskFxD2ABXp69up",
+  "name": "자동 메시징 시스템",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n\n- 매일 매일 학생의 상태를 부모에게 요약 전달\n- 학생에게 현재 상태 진도등을 그리고 필요한 내용등을 아침, 저녁으로 요약 제공함.\n- 관리자에게 이러한 상태를 요약 전달함.\n\n- 주가, 월간, 정리하여 보고서를 전달함.\n\n\n",
+        "height": 272,
+        "width": 576
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -944,
+        -368
+      ],
+      "id": "97154b84-6614-48b3-bda9-b9b243de6d0c",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "1a5d443e-6a26-43ba-8038-31a58ecb0070",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:27:18.383Z",
+      "createdAt": "2025-11-22T09:27:18.383Z",
+      "role": "workflow:owner",
+      "workflowId": "QCskFxD2ABXp69up",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

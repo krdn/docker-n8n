@@ -1,0 +1,54 @@
+{
+  "updatedAt": "2025-11-23T04:01:55.266Z",
+  "createdAt": "2025-11-23T04:01:55.266Z",
+  "id": "y0sRfESywvmwTj4C",
+  "name": "학원 관리 통합",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n\n- 학원 통합 정보\n- 메니저 정보 저장\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "269d88b5-579d-49f2-8330-3744495d0b27",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "58e6fcd5-92b1-4f75-8f2e-9597ed7e323e",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-23T04:01:55.266Z",
+      "createdAt": "2025-11-23T04:01:55.266Z",
+      "role": "workflow:owner",
+      "workflowId": "y0sRfESywvmwTj4C",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

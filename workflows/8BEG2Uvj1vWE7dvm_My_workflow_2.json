@@ -1,0 +1,97 @@
+{
+  "updatedAt": "2025-11-17T10:56:34.125Z",
+  "createdAt": "2025-10-27T07:36:01.448Z",
+  "id": "8BEG2Uvj1vWE7dvm",
+  "name": "My workflow 2",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 멘션 트리거\n**Double click** to edit me. [Guide](https://api.slack.com/apps/A09NR5EJY8J)",
+        "height": 96,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -656,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "f755e8f7-3379-4f1a-b94d-96eff9b8e105",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "trigger": [
+          "any_event"
+        ],
+        "channelId": {
+          "__rl": true,
+          "value": "C014GG1KVFA",
+          "mode": "list",
+          "cachedResultName": "general"
+        },
+        "options": {
+          "resolveIds": false,
+          "userIds": []
+        }
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -32
+      ],
+      "id": "57c5f5e0-f560-44ea-8257-2a52284199eb",
+      "name": "Slack Trigger",
+      "webhookId": "e17c6aa8-11ae-4795-abad-c1aa0a440786",
+      "credentials": {
+        "slackApi": {
+          "id": "e5GDMQTUtbzsWWyk",
+          "name": "Slack account 3"
+        }
+      }
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "093d1dc4-0de3-4475-adb4-48c634110ed4",
+  "activeVersionId": "093d1dc4-0de3-4475-adb4-48c634110ed4",
+  "versionCounter": 55,
+  "triggerCount": 1,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:12:09.044Z",
+      "createdAt": "2025-11-16T13:12:09.044Z",
+      "id": "aZu9uzC2NbhGEzcP",
+      "name": "study"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-10-27T07:36:01.448Z",
+      "createdAt": "2025-10-27T07:36:01.448Z",
+      "role": "workflow:owner",
+      "workflowId": "8BEG2Uvj1vWE7dvm",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

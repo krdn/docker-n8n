@@ -1,0 +1,40 @@
+{
+  "updatedAt": "2025-11-30T05:45:44.091Z",
+  "createdAt": "2025-11-30T05:45:44.091Z",
+  "id": "UqyH5BAUdUxJTBvR",
+  "name": "7.n8n",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "c5b7a879-d1e5-4778-9bbc-d5f2e3725e8d",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-30T05:45:44.091Z",
+      "createdAt": "2025-11-30T05:45:44.091Z",
+      "role": "workflow:owner",
+      "workflowId": "UqyH5BAUdUxJTBvR",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

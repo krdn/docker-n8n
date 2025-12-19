@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2025-11-23T03:57:51.472Z",
+  "createdAt": "2025-11-22T09:18:20.833Z",
+  "id": "8juXLejyWpBcsNzN",
+  "name": "문제 자동 생성",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n\n\n- 틀린 문제 사진 OCR\n- 취약점 분석 시스템\n- 학습 방향, 목표 제시\n- 스케줄 작성.\n- \n\n\n",
+        "height": 272,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -256
+      ],
+      "id": "22e1c8ec-b722-4da1-9247-086899ebac12",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "24eaae72-f4a9-4d8a-9f9b-8334c4a5fca0",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:18:20.833Z",
+      "createdAt": "2025-11-22T09:18:20.833Z",
+      "role": "workflow:owner",
+      "workflowId": "8juXLejyWpBcsNzN",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

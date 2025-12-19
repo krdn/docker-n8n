@@ -1,0 +1,732 @@
+{
+  "updatedAt": "2025-12-10T06:08:57.707Z",
+  "createdAt": "2025-11-09T14:33:03.903Z",
+  "id": "d4TxgdnhEc1IKaEG",
+  "name": "학습 방법 생성",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.aimodel }}",
+                    "rightValue": "models/gemini",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "60c808d5-b0ef-4b30-b338-5d6544f5e34d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "474b1522-83c9-4e7b-bb2b-822be276c6e3",
+                    "leftValue": "={{ $json.body.aimodel }}",
+                    "rightValue": "chatgpt",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b245b50c-8167-4fef-8bce-80d7e609b501",
+                    "leftValue": "={{ $json.body.aimodel }}",
+                    "rightValue": "moonshotai/kimi-k2:free",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -496,
+        256
+      ],
+      "id": "9bd39e5c-099c-4029-b73b-b36d93081e14",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "={{ $json.body.aimodel }}",
+          "mode": "id"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=당신은 \"AI 시대의 학습 설계 전문가\" 입니다.  \n내가 배우고 싶은 기술/지식에 대해 아래 구조에 따라  \n가장 효율적인 학습 경로와 실전 적용 방안을 설계해주세요.\n",
+              "role": "model"
+            },
+            {
+              "content": "=[{{ $('Webhook').item.json.body.title }}]\n{{ $('Webhook').item.json.body.list }}\n\n[학습 설계 요청]\n1) 이 기술이 AI와 연관이 있다면, AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\n2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n3) 반드시 알아야 하는 연관 개념 (순서대로)\n4) 학습 로드맵 (시간 1 → 시간 {{ $('Webhook').item.json.body.studytime }}) : 매 시간별 해야 할 구체적 행동 위주\n5) 실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)\n6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n7) 학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)\n8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n9) {{ $('Webhook').item.json.body.studytime }}시간 동안 학습이 끝낼수 있도록 분석 해줘."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        160
+      ],
+      "id": "a8051e8b-71ca-4fc6-8fd2-fda4141b09ae",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "g63PhpP72tYoltLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "={{ $('Webhook').item.json.body.title }}",
+        "message": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        480
+      ],
+      "id": "aa230677-ebb3-4f15-b5ce-4ee589499aba",
+      "name": "Send a message",
+      "webhookId": "327ff217-a182-4199-b52c-1cbcf8ca3df9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yAjD6OMhQWxiwoML",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.content.parts[0].text }}",
+        "options": {
+          "backslashEscapesHTMLTags": true,
+          "completeHTMLDocument": true,
+          "emoji": true,
+          "simpleLineBreaks": true,
+          "tables": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        272,
+        112
+      ],
+      "id": "ad2bf7c2-eda3-427c-bca0-c132c8e11dbc",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['내가 배우고 싶은 것'] }}\n{{ $json['학습 설계 요청(목록 -)'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=당신은 \"AI 시대의 학습 설계 전문가\" 입니다.  \n내가 배우고 싶은 기술/지식에 대해 아래 구조에 따라  \n가장 효율적인 학습 경로와 실전 적용 방안을 설계해주세요.\n"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "=[{{ $('Webhook').item.json.body.topic }}]\n{{ $('Webhook').item.json.body.goals }}\n\n[학습 설계 요청]\n1) 이 기술이 AI와 연관이 있다면, AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\n2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n3) 반드시 알아야 하는 연관 개념 (순서대로)\n4) 학습 로드맵 (시간 1 → 시간 {{ $('Webhook').item.json.body.studyTime }}) : 매 시간별 해야 할 구체적 행동 위주\n5) 실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)\n6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n7) 학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)\n8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n9) {{ $('Webhook').item.json.body.studyTime }}시간 동안 학습이 끝낼수 있도록 분석 해줘."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -272,
+        496
+      ],
+      "id": "47576628-fec5-4a1d-83b3-dc07854fd5f5",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "value": "={{ $json.body['내가배우고싶은것'] }} \\n {{ $json.body['학습설계요청목록'] }}",
+        "dataPropertyName": "hash"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        272
+      ],
+      "id": "15a6f758-a1bc-4908-9d94-5e8fdd924613",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "knowledge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -976,
+        272
+      ],
+      "id": "a9246382-a35a-4b3f-a4aa-ce5a503fbd4e",
+      "name": "Webhook",
+      "webhookId": "6fffeedc-1b3e-43fa-9e6a-a200f6ef0d3b",
+      "notes": "{\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"age\": 30,\n  \"address\": null\n}"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.data }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        288
+      ],
+      "id": "8293e82f-1894-4774-a6d5-2510121ace13",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.outputformat }}",
+                    "rightValue": "html",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "60c808d5-b0ef-4b30-b338-5d6544f5e34d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "474b1522-83c9-4e7b-bb2b-822be276c6e3",
+                    "leftValue": "={{ $('Webhook').item.json.body.outputformat }}",
+                    "rightValue": "markdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b245b50c-8167-4fef-8bce-80d7e609b501",
+                    "leftValue": "={{ $('Webhook').item.json.body.outputformat }}",
+                    "rightValue": "pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        48,
+        192
+      ],
+      "id": "5ed480fe-baae-4683-8101-9c9ab16415a3",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "model": "moonshotai/kimi-k2:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        656
+      ],
+      "id": "f3c09aa0-97d7-4b71-b29a-9ec5cb432f87",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "BroWfy6H0GVqxhGy",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 학습 방법 생성\n### 설명\n학습할 주제, 상세 내역 등록하면 선택된 AI Model을 통해 체계적인 학습 시나리오를 생성하여 제공한다.\n\n### 상세내역\n- 제목, 상세 내역\n- AI Model\n- 학습 시간\n",
+        "height": 272,
+        "width": 528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -992,
+        -160
+      ],
+      "id": "bf525039-9c37-494e-b4d8-4ebfc162ebe1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "formTitle": "$InputForm",
+        "formDescription": "학습하고자 하는 내용을 입력하면 상세하게 학습 방법등을 자세하게 알려줌",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "title",
+              "placeholder": "내가 배우고 싶은것",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "list",
+              "fieldType": "textarea",
+              "placeholder": "학습 설계 요청(목록 -)",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "ai_model",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "models/gemini-2.5-pro"
+                  },
+                  {
+                    "option": "models/gemini-2.5-flash"
+                  },
+                  {
+                    "option": "chatgpt"
+                  },
+                  {
+                    "option": "moonshotai/kimi-k2:free"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "study_time",
+              "fieldType": "number",
+              "placeholder": "학습시간",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "email",
+              "placeholder": "전달받을 Email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "output_format",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "html"
+                  },
+                  {
+                    "option": "markdown"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -960,
+        480
+      ],
+      "id": "cfa9b6b1-56c0-4cc7-919a-00e3c5a2e4e5",
+      "name": "InputForm",
+      "webhookId": "b8a75e76-ab9d-49b5-a379-198bd11c0407",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n\n      subject: $('Webhook').first().json.body.title,\n      content: $input.first().json.content.parts[0].text\n      \n      //subject: encodeURIComponent($json[\"subject\"]),\n      //content: encodeURIComponent($json[\"content\"])\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -96
+      ],
+      "id": "1fc37426-127b-46c7-ac9d-c7d6d42406b8",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openapi.naver.com/v1/cafe/31619088/menu/1/articles",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "subject",
+              "value": "={{ $json.subject }}"
+            },
+            {
+              "name": "content",
+              "value": "=안녕하세요! AI 시대의 학습 설계 전문가로서 당신의 효율적인 성장을 돕겠습니다."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        720,
+        -96
+      ],
+      "id": "3da33115-34dc-44b4-947f-1947399f17a7",
+      "name": "네이버 카페 저장",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "cesnQXOqT4EOhtCD",
+          "name": "네이버 카페 자동화 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "InputForm": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "네이버 카페 저장",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.krdn.kr",
+            "x-real-ip": "192.168.0.1",
+            "x-forwarded-for": "192.168.0.1",
+            "x-forwarded-proto": "https",
+            "connection": "close",
+            "content-length": "177",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+            "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?0",
+            "accept": "*/*",
+            "origin": "http://192.168.0.5:3002",
+            "sec-fetch-site": "cross-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "http://192.168.0.5:3002/",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "ko,en;q=0.9,en-US;q=0.8"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "title": "샘플 title",
+            "list": "샘플 list\n여러 줄 텍스트 예시입니다.",
+            "aimodel": "models/gemini-2.5-flash",
+            "studytime": 0,
+            "email": "샘플 email",
+            "outputformat": "html"
+          },
+          "webhookUrl": "https://n8n.krdn.kr/webhook-test/knowledge",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Markdown": [
+      {
+        "json": {
+          "content": {
+            "parts": [
+              {
+                "text": "안녕하세요! AI 시대의 학습 설계 전문가로서 당신의 효율적인 성장을 돕겠습니다.\n이번에 배우실 기술은 AI 개발 및 운영 환경에서 필수적인 **Docker (도커)** 입니다.\n\n---\n\n[샘플 title]\n**Docker (도커)**\n애플리케이션을 컨테이너라는 독립적인 환경에서 패키징하고 실행하는 오픈소스 플랫폼입니다. 개발, 배포, 실행 환경의 일관성을 보장하여 \"내 컴퓨터에서는 되는데 저기서는 안 돼\" 문제를 해결하며, AI/ML 개발 환경 구축, 모델 배포, MLOps 파이프라인 구성에 필수적으로 활용됩니다.\n\n---\n\n[학습 설계 요청]\n1) **이 기술이 AI와 연관이 있다면, AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약**\nAI 모델 개발 및 배포 환경의 일관성과 재현성을 보장하여 MLOps 효율을 극대화하는 핵심 기술입니다.\n\n2) **이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)**\n1.  **이미지 (Image):** 컨테이너를 만들기 위한 읽기 전용 템플릿이자 설계도 (실행 가능한 코드, 런타임, 시스템 도구, 라이브러리, 설정 파일을 포함).\n2.  **컨테이너 (Container):** 이미지의 실행 가능한 인스턴스로, 격리된 환경에서 애플리케이션이 작동하는 실제 공간.\n3.  **Dockerfile:** 이미지를 생성하기 위한 명령어를 순서대로 작성한 텍스트 파일. (어떤 OS 기반, 어떤 프로그램 설치, 어떻게 실행할지 정의)\n4.  **Docker CLI 명령어 기본:** `docker run`, `docker build`, `docker ps`, `docker stop`, `docker rm` 등 컨테이너와 이미지를 다루는 기본적인 조작법.\n\n3) **반드시 알아야 하는 연관 개념 (순서대로)**\n1.  **Docker Registry (Docker Hub):** 도커 이미지를 저장하고 공유하는 중앙 저장소 (GitHub과 유사).\n2.  **Docker Volume (볼륨):** 컨테이너의 데이터를 호스트 머신에 영구적으로 저장하여 컨테이너가 삭제되어도 데이터가 보존되도록 하는 기술.\n3.  **Docker Network (네트워크):** 여러 컨테이너 또는 컨테이너와 호스트 머신 간의 통신을 가능하게 하는 기술.\n4.  **Docker Compose:** 여러 개의 컨테이너를 하나의 서비스로 정의하고 관리하여 복잡한 다중 컨테이너 애플리케이션을 쉽게 배포하고 실행할 수 있게 하는 도구.\n5.  **컨테이너 오케스트레이션 개념 (Kubernetes 맛보기):** 대규모 컨테이너 배포, 관리, 스케일링을 자동화하는 시스템의 필요성 및 기본 개념 이해.\n\n4) **학습 로드맵 (시간 1 → 시간 0) : 매 시간별 해야 할 구체적 행동 위주**\n\n*   **1단계: 기본 개념 이해 및 첫 컨테이너 실행 (총 4시간)**\n    *   **1시간:** Docker의 등장 배경, 컨테이너 가상화와 VM 가상화 차이점, 이미지-컨테이너 관계 이론 학습.\n    *   **1시간:** Docker Desktop 설치 및 환경 설정. 터미널에서 `docker run hello-world` 실행하여 정상 작동 확인.\n    *   **2시간:** `docker run ubuntu`, `docker ps`, `docker stop`, `docker rm` 등 기본 CLI 명령어 연습. 간단한 웹 서버(Nginx) 컨테이너 실행 및 브라우저에서 접속 확인.\n\n*   **2단계: 나만의 이미지 만들기 (총 6시간)**\n    *   **2시간:** Dockerfile 기본 문법 학습 (FROM, RUN, CMD, EXPOSE, WORKDIR, COPY 등).\n    *   **2시간:** 간단한 Python Flask/FastAPI 앱 (Hello World 출력) 작성 후 Dockerfile 생성 및 `docker build`로 이미지 빌드.\n    *   **2시간:** 빌드된 이미지 `docker run`으로 실행 확인. Docker Hub 계정 생성 및 빌드한 이미지 `docker push`로 업로드, `docker pull`로 다시 다운로드하여 실행 확인.\n\n*   **3단계: 데이터 지속성 및 컨테이너 간 통신 (총 8시간)**\n    *   **3시간:** Docker Volume의 필요성 및 종류 학습 (bind mounts, named volumes). MySQL/PostgreSQL 컨테이너 실행 시 데이터 볼륨을 연결하여 데이터가 영구적으로 저장되는 실습.\n    *   **3시간:** Docker Network의 종류(bridge, host, none) 및 작동 방식 학습. 사용자 정의 네트워크 생성 및 여러 컨테이너를 같은 네트워크에 연결하여 서로 통신하는 실습.\n    *   **2시간:** (심화) Python Flask/FastAPI 앱 컨테이너와 MySQL/PostgreSQL DB 컨테이너를 같은 네트워크에 연결하여 앱이 DB에 접속하는 실습.\n\n*   **4단계: 다중 컨테이너 관리 (Docker Compose) (총 8시간)**\n    *   **3시간:** Docker Compose의 필요성 및 `docker-compose.yml` 파일 문법 학습 (services, networks, volumes).\n    *   **3시간:** 3단계에서 만든 Flask/FastAPI 앱 + DB 조합을 Docker Compose 파일로 변환하여 `docker-compose up`으로 한 번에 실행. `docker-compose down`, `logs`, `ps` 명령어 연습.\n    *   **2시간:** (AI/ML 연관) MLflow Tracking Server와 PostgreSQL DB를 Docker Compose로 구성하고, 로컬에서 간단한 ML 학습 코드 실행 후 MLflow로 실험 결과 트래킹하는 개념 이해 및 구성 시도.\n\n*   **5단계: AI/ML 특화 및 오케스트레이션 개념 (총 4시간)**\n    *   **2시간:** NVIDIA Docker(NVIDIA Container Toolkit) 개념 및 GPU를 활용하는 AI/ML 컨테이너 실행 방법 이해 (실제 실행은 환경 필요). JupyterLab, TensorFlow, PyTorch 등 AI 개발 환경 Dockerfile 예시 분석.\n    *   **2시간:** 컨테이너 오케스트레이션(Kubernetes)의 필요성 및 기본 개념(Pod, Deployment, Service) 학습. Docker Swarm과의 비교 및 MLOps에서의 역할 간략히 이해.\n\n5) **실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)**\n\n1.  **쉬움: 나만의 AI 개발 환경 컨테이너 구축**\n    *   **내용:** JupyterLab(혹은 VS Code Server)과 특정 버전의 Python, 그리고 필요한 AI/ML 라이브러리(TensorFlow, PyTorch, Scikit-learn, Pandas 등)를 포함하는 Docker 이미지를 Dockerfile로 직접 만들고 실행합니다. 이 환경에서 간단한 데이터 분석 및 모델 학습 코드를 돌려봅니다.\n    *   **목표:** Dockerfile 작성 능력, 이미지 빌드, 컨테이너 실행 및 개발 환경 격리 이해.\n\n2.  **보통: 간단한 AI 모델 서빙 API 컨테이너화**\n    *   **내용:** 미리 학습된 간단한 머신러닝 모델(예: 텍스트 분류, 이미지 분류)을 FastAPI나 Flask로 REST API 형태로 구현합니다. 이 API 서버를 Docker 컨테이너로 만들고, Docker Compose를 사용하여 API 컨테이너와 Redis(캐싱/큐) 또는 PostgreSQL(로그 저장) 컨테이너를 함께 띄워 상호 작용하도록 구성합니다.\n    *   **목표:** 다중 컨테이너 애플리케이션 구성, 컨테이너 간 통신, API 배포 환경 구축 이해.\n\n3.  **어려움: 경량 MLOps 파이프라인의 핵심 구성요소 컨테이너화 및 통합**\n    *   **내용:** MLflow Tracking Server와 PostgreSQL DB를 Docker Compose로 구성합니다. 별도의 Dockerfile을 이용하여 머신러닝 학습 코드를 실행할 수 있는 컨테이너를 만들고, 이 학습 컨테이너에서 MLflow Tracking Server로 실험 결과를 로깅하도록 구성합니다. 이후 모델 학습 및 트래킹 전체 과정을 `docker-compose up`으로 통합 실행하고, MLflow UI를 통해 결과를 확인합니다.\n    *   **목표:** MLOps 도구 컨테이너화, 컨테이너 간 복잡한 연동, 재현 가능한 ML 실험 환경 구축.\n\n6) **내가 흔히 빠지는 실수와 그걸 피하는 방법**\n\n1.  **\"Dockerfile이 너무 커져요\" (Bloated Image):**\n    *   **실수:** 한 Dockerfile에서 모든 빌드 단계를 순차적으로 실행하여 불필요한 파일(빌드 도구, 캐시 등)이 최종 이미지에 포함됨.\n    *   **해결:** **멀티 스테이지 빌드(Multi-stage Build)**를 사용하세요. 빌드 단계와 최종 이미지 단계를 분리하여 최종 이미지에는 실제 실행에 필요한 파일만 포함시킵니다. `.dockerignore` 파일을 활용하여 불필요한 파일을 이미지에 추가하지 않도록 합니다.\n\n2.  **\"컨테이너 데이터가 사라졌어요\" (Ephemeral Data):**\n    *   **실수:** 컨테이너가 삭제되면 컨테이너 내부에 생성되거나 변경된 모든 데이터가 함께 사라진다는 사실을 간과.\n    *   **해결:** **Docker Volume**을 항상 사용하세요. 데이터베이스, 로그 파일, 설정 파일 등 영구적으로 보존해야 할 데이터는 반드시 볼륨으로 마운트하여 호스트 머신에 저장해야 합니다.\n\n3.  **\"컨테이너 내부 디버깅이 어려워요\" (Debugging inside Container):**\n    *   **실수:** 컨테이너 내부를 블랙박스처럼 여겨 문제가 발생했을 때 원인 파악에 어려움을 겪음.\n    *   **해결:** `docker logs <container_name>`으로 컨테이너 로그를 확인하고, `docker exec -it <container_name> bash` 명령어로 컨테이너 내부에 직접 접속하여 문제 해결. 개발 중에는 소스코드를 볼륨으로 마운트하여 호스트에서 수정하고 컨테이너에서 바로 반영되도록 설정하면 편리합니다.\n\n4.  **\"루트 권한으로 컨테이너를 실행하고 있어요\" (Root Privilege):**\n    *   **실수:** Dockerfile에서 `USER` 명령어를 사용하지 않아 기본적으로 `root` 권한으로 프로세스가 실행됨.\n    *   **해결:** Dockerfile 내에서 `USER` 명령어를 사용하여 최소한의 권한을 가진 사용자(예: `appuser`)를 생성하고 해당 사용자로 애플리케이션을 실행하도록 설정하여 보안 취약점을 줄입니다.\n\n5.  **\"Docker Compose 서비스 간 통신 문제가 발생해요\" (Service Communication):**\n    *   **실수:** Docker Compose로 여러 서비스를 띄울 때, 서비스들이 서로 통신하지 못하거나 시작 순서 문제로 오류 발생.\n    *   **해결:** 서비스 간 통신 시 `localhost` 대신 **서비스 이름**을 사용하세요 (예: `db:5432` 대신 `postgresql:5432`). 또한, `depends_on`을 사용하여 서비스 간의 의존성(시작 순서)을 명시하고, `healthcheck`를 통해 서비스가 완전히 준비된 후에 다음 서비스가 시작되도록 하는 것이 좋습니다.\n\n7) **학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)**\n\n*   **공식 문서:**\n    *   [Docker Docs](https://docs.docker.com/get-started/): 가장 정확하고 최신 정보를 제공하는 자료. \"Get started\" 튜토리얼을 필히 따라 해보세요.\n*   **영상 강좌:**\n    *   **Nomad Coders - Docker (한글):** 초보자 눈높이에 맞춰 쉽고 재미있게 설명해주는 한글 강의. (유료/무료 강의 확인)\n    *   **TechWorld with Nana - Docker Tutorial for Beginners (영어):** Docker 입문자에게 강력 추천하는 강의. 쉽고 명확한 설명과 시각적인 자료가 뛰어납니다. (YouTube)\n*   **책:**\n    *   **\"시작하세요! 도커/쿠버네티스\" (용찬호 저):** 한글 입문서로 가장 많이 추천되는 책 중 하나. 실습 위주로 구성되어 있어 따라 하기 좋습니다.\n*   **GitHub/예제:**\n    *   [Awesome Docker](https://github.com/veggiemonk/awesome-docker): Docker 관련 유용한 도구, 라이브러리, 예제 등을 모아 놓은 레포지토리.\n    *   [Docker 공식 예제](https://github.com/docker/awesome-compose): 다양한 스택의 `docker-compose.yml` 예제들이 있어 실제 프로젝트 구성 시 참고하기 좋습니다.\n*   **온라인 튜토리얼/블로그:**\n    *   [TaeHyoung Kim Blog - Docker 카테고리](https://kimtaehyung.xyz/categories/docker): 깔끔하게 정리된 한글 Docker 튜토리얼.\n    *   각종 개발 블로그 (검색: \"Docker 튜토리얼\", \"Docker Compose 예제\" 등)\n\n8) **내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약**\n\"매일 새로운 컨테이너를 띄우거나 Dockerfile을 수정하고 빌드하며, 어제 배운 개념을 오늘 실행에 적용한다.\"\n\n9) **0시간 동안 학습이 끝낼수 있도록 분석 해줘.**\n0시간 동안 학습을 끝낼 수는 없습니다. 학습은 시간과 노력의 축적입니다. 다만, 이 로드맵은 AI 시대 전문가로서 **최단 시간 내에 핵심을 파악하고 실전에 적용할 수 있도록 가장 효율적인 경로를 압축**한 것입니다. 위에 제시된 학습 로드맵(약 25-30시간)과 실전 프로젝트를 꾸준히 수행하시면, 충분히 실무에 적용 가능한 수준에 도달하고 AI/ML 환경 구축에 자신감을 얻을 수 있을 것입니다."
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0,
+          "data": "<!DOCTYPE HTML>\n<html>\n<head>\n<meta charset=\"utf-8\">\n</head>\n<body>\n<p>안녕하세요! AI 시대의 학습 설계 전문가로서 당신의 효율적인 성장을 돕겠습니다.<br />\n이번에 배우실 기술은 AI 개발 및 운영 환경에서 필수적인 <strong>Docker (도커)</strong> 입니다.</p>\n<hr />\n<p>[샘플 title]<br />\n<strong>Docker (도커)</strong><br />\n애플리케이션을 컨테이너라는 독립적인 환경에서 패키징하고 실행하는 오픈소스 플랫폼입니다. 개발, 배포, 실행 환경의 일관성을 보장하여 \"내 컴퓨터에서는 되는데 저기서는 안 돼\" 문제를 해결하며, AI/ML 개발 환경 구축, 모델 배포, MLOps 파이프라인 구성에 필수적으로 활용됩니다.</p>\n<hr />\n<p>[학습 설계 요청]<br />\n1) <strong>이 기술이 AI와 연관이 있다면, AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약</strong><br />\nAI 모델 개발 및 배포 환경의 일관성과 재현성을 보장하여 MLOps 효율을 극대화하는 핵심 기술입니다.</p>\n<p>2) <strong>이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)</strong></p>\n<ol>\n<li><strong>이미지 (Image):</strong> 컨테이너를 만들기 위한 읽기 전용 템플릿이자 설계도 (실행 가능한 코드, 런타임, 시스템 도구, 라이브러리, 설정 파일을 포함).</li>\n<li><strong>컨테이너 (Container):</strong> 이미지의 실행 가능한 인스턴스로, 격리된 환경에서 애플리케이션이 작동하는 실제 공간.</li>\n<li><strong>Dockerfile:</strong> 이미지를 생성하기 위한 명령어를 순서대로 작성한 텍스트 파일. (어떤 OS 기반, 어떤 프로그램 설치, 어떻게 실행할지 정의)</li>\n<li><strong>Docker CLI 명령어 기본:</strong> <code>docker run</code>, <code>docker build</code>, <code>docker ps</code>, <code>docker stop</code>, <code>docker rm</code> 등 컨테이너와 이미지를 다루는 기본적인 조작법.</li>\n</ol>\n<p>3) <strong>반드시 알아야 하는 연관 개념 (순서대로)</strong></p>\n<ol>\n<li><strong>Docker Registry (Docker Hub):</strong> 도커 이미지를 저장하고 공유하는 중앙 저장소 (GitHub과 유사).</li>\n<li><strong>Docker Volume (볼륨):</strong> 컨테이너의 데이터를 호스트 머신에 영구적으로 저장하여 컨테이너가 삭제되어도 데이터가 보존되도록 하는 기술.</li>\n<li><strong>Docker Network (네트워크):</strong> 여러 컨테이너 또는 컨테이너와 호스트 머신 간의 통신을 가능하게 하는 기술.</li>\n<li><strong>Docker Compose:</strong> 여러 개의 컨테이너를 하나의 서비스로 정의하고 관리하여 복잡한 다중 컨테이너 애플리케이션을 쉽게 배포하고 실행할 수 있게 하는 도구.</li>\n<li><strong>컨테이너 오케스트레이션 개념 (Kubernetes 맛보기):</strong> 대규모 컨테이너 배포, 관리, 스케일링을 자동화하는 시스템의 필요성 및 기본 개념 이해.</li>\n</ol>\n<p>4) <strong>학습 로드맵 (시간 1 → 시간 0) : 매 시간별 해야 할 구체적 행동 위주</strong></p>\n<ul>\n<li><p><strong>1단계: 기본 개념 이해 및 첫 컨테이너 실행 (총 4시간)</strong></p>\n<ul>\n<li><strong>1시간:</strong> Docker의 등장 배경, 컨테이너 가상화와 VM 가상화 차이점, 이미지-컨테이너 관계 이론 학습.</li>\n<li><strong>1시간:</strong> Docker Desktop 설치 및 환경 설정. 터미널에서 <code>docker run hello-world</code> 실행하여 정상 작동 확인.</li>\n<li><strong>2시간:</strong> <code>docker run ubuntu</code>, <code>docker ps</code>, <code>docker stop</code>, <code>docker rm</code> 등 기본 CLI 명령어 연습. 간단한 웹 서버(Nginx) 컨테이너 실행 및 브라우저에서 접속 확인.</li></ul></li>\n<li><p><strong>2단계: 나만의 이미지 만들기 (총 6시간)</strong></p>\n<ul>\n<li><strong>2시간:</strong> Dockerfile 기본 문법 학습 (FROM, RUN, CMD, EXPOSE, WORKDIR, COPY 등).</li>\n<li><strong>2시간:</strong> 간단한 Python Flask/FastAPI 앱 (Hello World 출력) 작성 후 Dockerfile 생성 및 <code>docker build</code>로 이미지 빌드.</li>\n<li><strong>2시간:</strong> 빌드된 이미지 <code>docker run</code>으로 실행 확인. Docker Hub 계정 생성 및 빌드한 이미지 <code>docker push</code>로 업로드, <code>docker pull</code>로 다시 다운로드하여 실행 확인.</li></ul></li>\n<li><p><strong>3단계: 데이터 지속성 및 컨테이너 간 통신 (총 8시간)</strong></p>\n<ul>\n<li><strong>3시간:</strong> Docker Volume의 필요성 및 종류 학습 (bind mounts, named volumes). MySQL/PostgreSQL 컨테이너 실행 시 데이터 볼륨을 연결하여 데이터가 영구적으로 저장되는 실습.</li>\n<li><strong>3시간:</strong> Docker Network의 종류(bridge, host, none) 및 작동 방식 학습. 사용자 정의 네트워크 생성 및 여러 컨테이너를 같은 네트워크에 연결하여 서로 통신하는 실습.</li>\n<li><strong>2시간:</strong> (심화) Python Flask/FastAPI 앱 컨테이너와 MySQL/PostgreSQL DB 컨테이너를 같은 네트워크에 연결하여 앱이 DB에 접속하는 실습.</li></ul></li>\n<li><p><strong>4단계: 다중 컨테이너 관리 (Docker Compose) (총 8시간)</strong></p>\n<ul>\n<li><strong>3시간:</strong> Docker Compose의 필요성 및 <code>docker-compose.yml</code> 파일 문법 학습 (services, networks, volumes).</li>\n<li><strong>3시간:</strong> 3단계에서 만든 Flask/FastAPI 앱 + DB 조합을 Docker Compose 파일로 변환하여 <code>docker-compose up</code>으로 한 번에 실행. <code>docker-compose down</code>, <code>logs</code>, <code>ps</code> 명령어 연습.</li>\n<li><strong>2시간:</strong> (AI/ML 연관) MLflow Tracking Server와 PostgreSQL DB를 Docker Compose로 구성하고, 로컬에서 간단한 ML 학습 코드 실행 후 MLflow로 실험 결과 트래킹하는 개념 이해 및 구성 시도.</li></ul></li>\n<li><p><strong>5단계: AI/ML 특화 및 오케스트레이션 개념 (총 4시간)</strong></p>\n<ul>\n<li><strong>2시간:</strong> NVIDIA Docker(NVIDIA Container Toolkit) 개념 및 GPU를 활용하는 AI/ML 컨테이너 실행 방법 이해 (실제 실행은 환경 필요). JupyterLab, TensorFlow, PyTorch 등 AI 개발 환경 Dockerfile 예시 분석.</li>\n<li><strong>2시간:</strong> 컨테이너 오케스트레이션(Kubernetes)의 필요성 및 기본 개념(Pod, Deployment, Service) 학습. Docker Swarm과의 비교 및 MLOps에서의 역할 간략히 이해.</li></ul></li>\n</ul>\n<p>5) <strong>실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)</strong></p>\n<ol>\n<li><p><strong>쉬움: 나만의 AI 개발 환경 컨테이너 구축</strong></p>\n<ul>\n<li><strong>내용:</strong> JupyterLab(혹은 VS Code Server)과 특정 버전의 Python, 그리고 필요한 AI/ML 라이브러리(TensorFlow, PyTorch, Scikit-learn, Pandas 등)를 포함하는 Docker 이미지를 Dockerfile로 직접 만들고 실행합니다. 이 환경에서 간단한 데이터 분석 및 모델 학습 코드를 돌려봅니다.</li>\n<li><strong>목표:</strong> Dockerfile 작성 능력, 이미지 빌드, 컨테이너 실행 및 개발 환경 격리 이해.</li></ul></li>\n<li><p><strong>보통: 간단한 AI 모델 서빙 API 컨테이너화</strong></p>\n<ul>\n<li><strong>내용:</strong> 미리 학습된 간단한 머신러닝 모델(예: 텍스트 분류, 이미지 분류)을 FastAPI나 Flask로 REST API 형태로 구현합니다. 이 API 서버를 Docker 컨테이너로 만들고, Docker Compose를 사용하여 API 컨테이너와 Redis(캐싱/큐) 또는 PostgreSQL(로그 저장) 컨테이너를 함께 띄워 상호 작용하도록 구성합니다.</li>\n<li><strong>목표:</strong> 다중 컨테이너 애플리케이션 구성, 컨테이너 간 통신, API 배포 환경 구축 이해.</li></ul></li>\n<li><p><strong>어려움: 경량 MLOps 파이프라인의 핵심 구성요소 컨테이너화 및 통합</strong></p>\n<ul>\n<li><strong>내용:</strong> MLflow Tracking Server와 PostgreSQL DB를 Docker Compose로 구성합니다. 별도의 Dockerfile을 이용하여 머신러닝 학습 코드를 실행할 수 있는 컨테이너를 만들고, 이 학습 컨테이너에서 MLflow Tracking Server로 실험 결과를 로깅하도록 구성합니다. 이후 모델 학습 및 트래킹 전체 과정을 <code>docker-compose up</code>으로 통합 실행하고, MLflow UI를 통해 결과를 확인합니다.</li>\n<li><strong>목표:</strong> MLOps 도구 컨테이너화, 컨테이너 간 복잡한 연동, 재현 가능한 ML 실험 환경 구축.</li></ul></li>\n</ol>\n<p>6) <strong>내가 흔히 빠지는 실수와 그걸 피하는 방법</strong></p>\n<ol>\n<li><p><strong>\"Dockerfile이 너무 커져요\" (Bloated Image):</strong></p>\n<ul>\n<li><strong>실수:</strong> 한 Dockerfile에서 모든 빌드 단계를 순차적으로 실행하여 불필요한 파일(빌드 도구, 캐시 등)이 최종 이미지에 포함됨.</li>\n<li><strong>해결:</strong> <strong>멀티 스테이지 빌드(Multi-stage Build)</strong>를 사용하세요. 빌드 단계와 최종 이미지 단계를 분리하여 최종 이미지에는 실제 실행에 필요한 파일만 포함시킵니다. <code>.dockerignore</code> 파일을 활용하여 불필요한 파일을 이미지에 추가하지 않도록 합니다.</li></ul></li>\n<li><p><strong>\"컨테이너 데이터가 사라졌어요\" (Ephemeral Data):</strong></p>\n<ul>\n<li><strong>실수:</strong> 컨테이너가 삭제되면 컨테이너 내부에 생성되거나 변경된 모든 데이터가 함께 사라진다는 사실을 간과.</li>\n<li><strong>해결:</strong> <strong>Docker Volume</strong>을 항상 사용하세요. 데이터베이스, 로그 파일, 설정 파일 등 영구적으로 보존해야 할 데이터는 반드시 볼륨으로 마운트하여 호스트 머신에 저장해야 합니다.</li></ul></li>\n<li><p><strong>\"컨테이너 내부 디버깅이 어려워요\" (Debugging inside Container):</strong></p>\n<ul>\n<li><strong>실수:</strong> 컨테이너 내부를 블랙박스처럼 여겨 문제가 발생했을 때 원인 파악에 어려움을 겪음.</li>\n<li><strong>해결:</strong> <code>docker logs &lt;container_name&gt;</code>으로 컨테이너 로그를 확인하고, <code>docker exec -it &lt;container_name&gt; bash</code> 명령어로 컨테이너 내부에 직접 접속하여 문제 해결. 개발 중에는 소스코드를 볼륨으로 마운트하여 호스트에서 수정하고 컨테이너에서 바로 반영되도록 설정하면 편리합니다.</li></ul></li>\n<li><p><strong>\"루트 권한으로 컨테이너를 실행하고 있어요\" (Root Privilege):</strong></p>\n<ul>\n<li><strong>실수:</strong> Dockerfile에서 <code>USER</code> 명령어를 사용하지 않아 기본적으로 <code>root</code> 권한으로 프로세스가 실행됨.</li>\n<li><strong>해결:</strong> Dockerfile 내에서 <code>USER</code> 명령어를 사용하여 최소한의 권한을 가진 사용자(예: <code>appuser</code>)를 생성하고 해당 사용자로 애플리케이션을 실행하도록 설정하여 보안 취약점을 줄입니다.</li></ul></li>\n<li><p><strong>\"Docker Compose 서비스 간 통신 문제가 발생해요\" (Service Communication):</strong></p>\n<ul>\n<li><strong>실수:</strong> Docker Compose로 여러 서비스를 띄울 때, 서비스들이 서로 통신하지 못하거나 시작 순서 문제로 오류 발생.</li>\n<li><strong>해결:</strong> 서비스 간 통신 시 <code>localhost</code> 대신 <strong>서비스 이름</strong>을 사용하세요 (예: <code>db:5432</code> 대신 <code>postgresql:5432</code>). 또한, <code>depends_on</code>을 사용하여 서비스 간의 의존성(시작 순서)을 명시하고, <code>healthcheck</code>를 통해 서비스가 완전히 준비된 후에 다음 서비스가 시작되도록 하는 것이 좋습니다.</li></ul></li>\n</ol>\n<p>7) <strong>학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)</strong></p>\n<ul>\n<li><strong>공식 문서:</strong><ul>\n<li><a href=\"https://docs.docker.com/get-started/\">Docker Docs</a>: 가장 정확하고 최신 정보를 제공하는 자료. \"Get started\" 튜토리얼을 필히 따라 해보세요.</li></ul></li>\n<li><strong>영상 강좌:</strong><ul>\n<li><strong>Nomad Coders - Docker (한글):</strong> 초보자 눈높이에 맞춰 쉽고 재미있게 설명해주는 한글 강의. (유료/무료 강의 확인)</li>\n<li><strong>TechWorld with Nana - Docker Tutorial for Beginners (영어):</strong> Docker 입문자에게 강력 추천하는 강의. 쉽고 명확한 설명과 시각적인 자료가 뛰어납니다. (YouTube)</li></ul></li>\n<li><strong>책:</strong><ul>\n<li><strong>\"시작하세요! 도커/쿠버네티스\" (용찬호 저):</strong> 한글 입문서로 가장 많이 추천되는 책 중 하나. 실습 위주로 구성되어 있어 따라 하기 좋습니다.</li></ul></li>\n<li><strong>GitHub/예제:</strong><ul>\n<li><a href=\"https://github.com/veggiemonk/awesome-docker\">Awesome Docker</a>: Docker 관련 유용한 도구, 라이브러리, 예제 등을 모아 놓은 레포지토리.</li>\n<li><a href=\"https://github.com/docker/awesome-compose\">Docker 공식 예제</a>: 다양한 스택의 <code>docker-compose.yml</code> 예제들이 있어 실제 프로젝트 구성 시 참고하기 좋습니다.</li></ul></li>\n<li><strong>온라인 튜토리얼/블로그:</strong><ul>\n<li><a href=\"https://kimtaehyung.xyz/categories/docker\">TaeHyoung Kim Blog - Docker 카테고리</a>: 깔끔하게 정리된 한글 Docker 튜토리얼.</li>\n<li>각종 개발 블로그 (검색: \"Docker 튜토리얼\", \"Docker Compose 예제\" 등)</li></ul></li>\n</ul>\n<p>8) **내가 매일 해야 할 **단 한 줄 루틴<strong>으로 압축 요약</strong><br />\n\"매일 새로운 컨테이너를 띄우거나 Dockerfile을 수정하고 빌드하며, 어제 배운 개념을 오늘 실행에 적용한다.\"</p>\n<p>9) <strong>0시간 동안 학습이 끝낼수 있도록 분석 해줘.</strong><br />\n0시간 동안 학습을 끝낼 수는 없습니다. 학습은 시간과 노력의 축적입니다. 다만, 이 로드맵은 AI 시대 전문가로서 <strong>최단 시간 내에 핵심을 파악하고 실전에 적용할 수 있도록 가장 효율적인 경로를 압축</strong>한 것입니다. 위에 제시된 학습 로드맵(약 25-30시간)과 실전 프로젝트를 꾸준히 수행하시면, 충분히 실무에 적용 가능한 수준에 도달하고 AI/ML 환경 구축에 자신감을 얻을 수 있을 것입니다.</p>\n</body>\n</html>"
+        }
+      }
+    ]
+  },
+  "versionId": "a2163932-1d17-4fbf-a8e8-d0d352060de5",
+  "activeVersionId": "a2163932-1d17-4fbf-a8e8-d0d352060de5",
+  "versionCounter": 527,
+  "triggerCount": 1,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-09T14:33:03.903Z",
+      "createdAt": "2025-11-09T14:33:03.903Z",
+      "role": "workflow:owner",
+      "workflowId": "d4TxgdnhEc1IKaEG",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

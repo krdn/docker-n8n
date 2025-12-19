@@ -1,0 +1,200 @@
+{
+  "updatedAt": "2025-12-11T04:08:25.705Z",
+  "createdAt": "2025-12-06T08:29:06.322Z",
+  "id": "oOj0LDGY8rogM0BB",
+  "name": "Naver Cafe",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        32
+      ],
+      "id": "d7a571e9-eb07-4ed1-a679-490aaea66b43",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)\n\n\n[Naver Developrs Application (n8n-cafe)](https://developers.naver.com/apps/#/myapps/68aI4F2wUycHGdDi4duP/overview)\n\n\n[내 Application n8n-cafe](https://developers.naver.com/apps/#/myapps/68aI4F2wUycHGdDi4duP/overview)\n\n[카페 API 명세](https://developers.naver.com/docs/login/cafe-api/cafe-api.md)\n",
+        "height": 272,
+        "width": 1040
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -288
+      ],
+      "id": "abdbd8cd-e361-4892-9ff7-c90a30387b81",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openapi.naver.com/v1/cafe/31619088/menu/1/articles",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "subject",
+              "value": "={{ $json.subject }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $json.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        368,
+        32
+      ],
+      "id": "e8f90f6e-528e-41ad-8a0e-4fdad5ac453b",
+      "name": "HTTP Request1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "cesnQXOqT4EOhtCD",
+          "name": "네이버 카페 자동화 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      subject: encodeURIComponent($json[\"subject\"]),\n      content: encodeURIComponent($json[\"content\"])\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        32
+      ],
+      "id": "4b85d234-c91c-463b-b8cb-e0697e887135",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df35e00f-670a-4ecd-8992-08536fb1b41c",
+              "name": "subject",
+              "value": "제목 테스트",
+              "type": "string"
+            },
+            {
+              "id": "e295e8f2-e769-4df4-a35e-1f5765c2d14d",
+              "name": "content",
+              "value": "물론입니다. 우분투에서 직접 호스팅(Self-hosting)하며 n8n을 사용하고 계신다면, 데이터 보안과 커스터마이징 측면에서 매우 유리한 고지를 점하고 계신 겁니다.\n\n특정 정치인에 대한 여론을 분석하는 AI 에이전트는 **데이터 수집(Input) → 가공 및 분석(Processing) → 결과 도출 및 리포팅(Output)**의 3단계 파이프라인으로 구성됩니다. 이 과정을 n8n으로 어떻게 구현할지 전문가 관점에서 단계별로 상세히 제안해 드리겠습니다.\n\n1. 전체 아키텍처 개요 (Big Picture)\n우리가 만들 에이전트는 단순히 \"검색\"만 하는 것이 아니라, 여러 소스에서 정보를 긁어와(Scraping), AI에게 맥락을 이해시키고(Contextualizing), 감정을 분석(Sentiment Analysis)하여 요약 리포트(Insight)를 만들어야 합니다.\n\n핵심 워크플로우 구성\nTrigger (시작): 매일 특정 시간(예: 오전 8시) 또는 수동 실행.\n\nCollector (수집): 뉴스, 커뮤니티, SNS에서 데이터 수집.\n\nAnalyzer (분석): LLM(ChatGPT, Claude 등)을 활용한 감정 및 키워드 분석.\n\nReporter (보고): 분석 결과를 슬랙, 이메일, 혹은 대시보드로 전송.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        32
+      ],
+      "id": "66609e6e-15aa-49a6-b45d-923ad22d832f",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Edit Fields": [
+      {
+        "json": {
+          "subject": "제목 테스트",
+          "content": "물론입니다. 우분투에서 직접 호스팅(Self-hosting)하며 n8n을 사용하고 계신다면, 데이터 보안과 커스터마이징 측면에서 매우 유리한 고지를 점하고 계신 겁니다.\n\n특정 정치인에 대한 여론을 분석하는 AI 에이전트는 **데이터 수집(Input) → 가공 및 분석(Processing) → 결과 도출 및 리포팅(Output)**의 3단계 파이프라인으로 구성됩니다. 이 과정을 n8n으로 어떻게 구현할지 전문가 관점에서 단계별로 상세히 제안해 드리겠습니다.\n\n1. 전체 아키텍처 개요 (Big Picture)\n우리가 만들 에이전트는 단순히 \"검색\"만 하는 것이 아니라, 여러 소스에서 정보를 긁어와(Scraping), AI에게 맥락을 이해시키고(Contextualizing), 감정을 분석(Sentiment Analysis)하여 요약 리포트(Insight)를 만들어야 합니다.\n\n핵심 워크플로우 구성\nTrigger (시작): 매일 특정 시간(예: 오전 8시) 또는 수동 실행.\n\nCollector (수집): 뉴스, 커뮤니티, SNS에서 데이터 수집.\n\nAnalyzer (분석): LLM(ChatGPT, Claude 등)을 활용한 감정 및 키워드 분석.\n\nReporter (보고): 분석 결과를 슬랙, 이메일, 혹은 대시보드로 전송."
+        }
+      }
+    ]
+  },
+  "versionId": "381f0ad2-c708-4636-a4a7-4a37611f342c",
+  "activeVersionId": null,
+  "versionCounter": 9,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-12-06T08:29:06.322Z",
+      "createdAt": "2025-12-06T08:29:06.322Z",
+      "role": "workflow:owner",
+      "workflowId": "oOj0LDGY8rogM0BB",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

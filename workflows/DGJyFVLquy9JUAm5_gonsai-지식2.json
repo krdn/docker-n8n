@@ -1,0 +1,625 @@
+{
+  "updatedAt": "2025-11-22T09:10:05.226Z",
+  "createdAt": "2025-11-18T07:05:31.205Z",
+  "id": "DGJyFVLquy9JUAm5",
+  "name": "gonsai-지식2",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "=({{ $json.body.llmModel }}).length",
+                    "rightValue": "models/gemini",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "60c808d5-b0ef-4b30-b338-5d6544f5e34d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "474b1522-83c9-4e7b-bb2b-822be276c6e3",
+                    "leftValue": "={{ $json.body.llmModel }}",
+                    "rightValue": "ChatGPT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b245b50c-8167-4fef-8bce-80d7e609b501",
+                    "leftValue": "={{ $json.body.llmModel }}",
+                    "rightValue": "moonshotai/kimi-k2:free",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -496,
+        256
+      ],
+      "id": "8b486c9b-ab7a-465b-aa6f-b2e5bbbc79ad",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "={{ $json.body.llmModel }}",
+          "mode": "id"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=당신은 \"AI 시대의 학습 설계 전문가\" 입니다.  \n내가 배우고 싶은 기술/지식에 대해 아래 구조에 따라  \n가장 효율적인 학습 경로와 실전 적용 방안을 설계해주세요.\n",
+              "role": "model"
+            },
+            {
+              "content": "=[{{ $json.body.topic }}]\n{{ $json.body.goals }}\n\n[학습 설계 요청]\n1) 이 기술이 AI와 연관이 있다면, AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\n2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n3) 반드시 알아야 하는 연관 개념 (순서대로)\n4) 학습 로드맵 (시간 1 → 시간 {{ $json.body.studyTime }}) : 매 시간별 해야 할 구체적 행동 위주\n5) 실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)\n6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n7) 학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)\n8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n9) {{ $json.body.studyTime }}시간 동안 학습이 끝낼수 있도록 분석 해줘."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        160
+      ],
+      "id": "3e2a0603-ce68-4e28-8be6-5fdf8bae9272",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "g63PhpP72tYoltLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.notificationEmail }}",
+        "subject": "={{ $('Webhook').item.json.body.topic }}",
+        "message": "={{ $json.data }}",
+        "options": {},
+        "path": "fd47e636-dcaa-4edf-886d-8d502d8d4f09"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        592,
+        448
+      ],
+      "id": "76b5b0a2-8981-4038-9814-ad73cbc49eb6",
+      "name": "Send a message",
+      "webhookId": "fd47e636-dcaa-4edf-886d-8d502d8d4f09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yAjD6OMhQWxiwoML",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.content.parts[0].text }}",
+        "options": {
+          "backslashEscapesHTMLTags": true,
+          "emoji": true,
+          "simpleLineBreaks": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        304,
+        112
+      ],
+      "id": "9cd8281c-d834-4136-b20b-1fd6f741a26e",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['내가 배우고 싶은 것'] }}\n{{ $json['학습 설계 요청(목록 -)'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=당신은 \"AI 시대의 학습 설계 전문가\" 입니다.  \n내가 배우고 싶은 기술/지식에 대해 아래 구조에 따라  \n가장 효율적인 학습 경로와 실전 적용 방안을 설계해주세요.\n"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "=[{{ $('Webhook').item.json.body.topic }}]\n{{ $('Webhook').item.json.body.goals }}\n\n[학습 설계 요청]\n1) 이 기술이 AI와 연관이 있다면, AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\n2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n3) 반드시 알아야 하는 연관 개념 (순서대로)\n4) 학습 로드맵 (시간 1 → 시간 {{ $('Webhook').item.json.body.studyTime }}) : 매 시간별 해야 할 구체적 행동 위주\n5) 실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)\n6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n7) 학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)\n8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n9) {{ $('Webhook').item.json.body.studyTime }}시간 동안 학습이 끝낼수 있도록 분석 해줘."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -272,
+        496
+      ],
+      "id": "561b9eca-1fc6-4cf3-8b73-ee28ecc51991",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "value": "={{ $json.body.topic }}{{ $json.body.goals }}",
+        "dataPropertyName": "hash"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        272
+      ],
+      "id": "828cbcca-1c77-4220-9a58-30e2989afe70",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b0241a69-8c24-405f-a589-e614c60da1f5",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -912,
+        272
+      ],
+      "id": "cbac748a-35ab-464a-9a5c-e11a34ec16f0",
+      "name": "Webhook",
+      "webhookId": "b0241a69-8c24-405f-a589-e614c60da1f5",
+      "notes": "{\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"age\": 30,\n  \"address\": null\n}"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.data }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        240
+      ],
+      "id": "89cc2e84-70e1-43c9-859d-8856a7977254",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.outputFormat }}",
+                    "rightValue": "html",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "60c808d5-b0ef-4b30-b338-5d6544f5e34d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "474b1522-83c9-4e7b-bb2b-822be276c6e3",
+                    "leftValue": "={{ $('Webhook').item.json.body.outputFormat }}",
+                    "rightValue": "markdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b245b50c-8167-4fef-8bce-80d7e609b501",
+                    "leftValue": "={{ $('Webhook').item.json.body.outputFormat }}",
+                    "rightValue": "pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        48,
+        192
+      ],
+      "id": "7b1c8727-5399-4d97-aab2-7b5ee86e1aa6",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "model": "moonshotai/kimi-k2:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        656
+      ],
+      "id": "1320fef3-2617-4673-91bc-dd9491659261",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "BroWfy6H0GVqxhGy",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n\n{\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"age\": 30,\n  \"address\": null\n}",
+        "height": 240,
+        "width": 528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        -16
+      ],
+      "id": "f8712b64-6731-4847-89e2-9cb079a6168f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "authentication": "basicAuth",
+        "formTitle": "$InputForm",
+        "formDescription": "학습하고자 하는 내용을 입력하면 상세하게 학습 방법등을 자세하게 알려줌",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "내가 배우고 싶은 것",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "학습 설계 요청(목록 -)",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "LLM 모델선택",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Gemini"
+                  },
+                  {
+                    "option": "ChatGPI"
+                  },
+                  {
+                    "option": "Claude"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "학습 시간:",
+              "fieldType": "number",
+              "placeholder": "8",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "받을 Email:",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {},
+        "path": "a717a478-ef51-48a1-b862-d88624bf190f"
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -912,
+        464
+      ],
+      "id": "a12d3106-42ea-42e5-a4ca-438176c220c1",
+      "name": "InputForm",
+      "webhookId": "a717a478-ef51-48a1-b862-d88624bf190f",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "obN94ojFPGLZtx5W",
+          "name": "Unnamed credential"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "localhost:5678",
+            "connection": "keep-alive",
+            "content-length": "196",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+            "sec-ch-ua": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?0",
+            "accept": "*/*",
+            "origin": "http://krdn.iptime.org:3002",
+            "sec-fetch-site": "cross-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "http://krdn.iptime.org:3002/",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "ko,en;q=0.9,en-US;q=0.8"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "내가배우고싶은것123": "환율",
+            "학습시간": 20,
+            "학습설계요청목록": "- 한국 환율 분석\n- 향후 6개월까지",
+            "lLM모델선택": "Gemini",
+            "받을Email": "krdn.gon@gmail.com"
+          },
+          "webhookUrl": "https://krdn-n8n.duckdns.org/webhook-test/knowledge",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "5cb622ea-0aec-4457-a483-d4397aa0e4c0",
+  "activeVersionId": null,
+  "versionCounter": 313,
+  "triggerCount": 1,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:08:22.642Z",
+      "createdAt": "2025-11-16T13:08:22.642Z",
+      "id": "tyCL20qgI2s9SdQr",
+      "name": "krdn"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-18T07:05:31.205Z",
+      "createdAt": "2025-11-18T07:05:31.205Z",
+      "role": "workflow:owner",
+      "workflowId": "DGJyFVLquy9JUAm5",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,490 @@
+{
+  "updatedAt": "2025-12-05T13:23:52.945Z",
+  "createdAt": "2025-12-05T11:53:46.530Z",
+  "id": "2I7LYsq4scwZVoLb",
+  "name": "Wordpress 자동화",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n\nhttps://wordpress.com/home/krdn2.wordpress.com\n\nhttps://krdn2.wordpress.com/\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1248,
+        -656
+      ],
+      "id": "19e79421-96e3-446c-8510-9e3891517488",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "=당신은 AI 관련 콘텐츠 기획자입니다.\n당신의 역할은 사용자가 입력한 키워드를 기반으로 최신 AI 트렌드, 연구, 기술적 혁신을 수집하고,\n주요 AI 기술, 연구 논문, 산업 적용 사례 등을 중심으로 정보를 정리하는 것입니다.\n\n⚠️ 반드시 지켜야 할 규칙:\n\nUser message는 항상 검색 키워드로 사용합니다.\n\n예: \"딥러닝\" → 딥러닝 관련 최신 연구 동향, 기술 혁신, 응용 분야 등을 조사.\n\n검색 결과는 신뢰할 수 있는 출처(AI 연구 논문, 기술 블로그, 뉴스 기사 등)를 우선시합니다.\n\n검색 키워드\n\n\"사용자 입력 키워드\"\n\n관련 데이터\n - 최신 AI 연구 동향 및 기술\n - AI 응용 사례 (산업 적용, 제품 혁신 등)\n - 관련 논문/기사 인용 (출처 URL 포함)\n - 마케팅 인사이트\n - 해당 키워드와 연관된 마케팅 활용 포인트 (예: AI 제품 마케팅 전략, 기술 발전에 따른 시장 전망)\n\nAI와 무관한 데이터는 제외합니다.\n응답은 항상 간결하고 실무자가 바로 활용할 수 있도록 구성합니다.\n\n항상 한글로 작성해줘",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.keyword }}"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        -1008,
+        -400
+      ],
+      "id": "aee2b75b-d197-49ff-a4a1-336432cd1b60",
+      "name": "Perplexity",
+      "credentials": {
+        "perplexityApi": {
+          "id": "JxeRHViCizJTodnE",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "AI 블로그 포스팅 자동화",
+        "formDescription": "AI 블로그 관련 키워드를 입력해 주세요.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "keyword",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -1216,
+        -400
+      ],
+      "id": "75239140-764d-45a5-9b45-fe71e82394e8",
+      "name": "FROM",
+      "webhookId": "dc202f73-a6ba-4daf-b25e-f4f43bcf816c"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "=당신은 대한민국의 AI 전문 회사 \"AI BRIDGE\"의 리서치 담당자입니다. 아래 내용을 참고하여 양질의 데이터를 수집해 주세요.\n\n* 오늘 날짜 : {{ $now }}\n* 입력 키워드: \"{{ $('FROM').item.json.keyword }}\"\n\n\n📌 다음과 같은 작업을 수행하세요:\n\n1. **SerpAPI 기반 검색 데이터 수집**\n   - 위의 키워드를 SerpAPI에 전달해 관련 검색 결과, 블로그 제목, 트렌드 키워드, 연관 질문, URL 등을 수집하세요.\n   - 최대 10회 검색을 진행하고, 제목/메타 설명 작성 시 활용하세요.\n\n2. **데이터 취합 **\n   - 직전 노드로 부터 전달 받은 온라인 서치 데이터(Perplexity API)와 SerpAPI 수집 데이터를 종합해 주세요.\n   - 요약은 피하고, 유의미한 내용만 남겨 맥락 있는 정보로 가공해 주세요.\n   - 가공된 정보는 이후 AI 관련 블로그 포스트 서론 구성에 활용 예정입니다. \n\n3. **최종 출력 포맷**\n   - 다음 JSON 구조에 맞춰 결과를 출력하세요:\n\n```\n{\n  \"\"research\"\": 수집 데이터 취합 내용 구성,\n  \"\"citations\"\" : {\n    \"\"citation\"\" : 데이터 출처 명시\n  }\n   \n}```"
+            },
+            {
+              "content": "={\n\"citations\" : {{ $json.citations }},\n\"content\" : {{ $json.choices[0].message.content }}\n}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -800,
+        -400
+      ],
+      "id": "d85d9e68-84e1-4e90-befe-d4e8ea0d9315",
+      "name": "Research GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ytw7vBmi9IDnlrzp",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        -192
+      ],
+      "id": "6f10ff6d-cf32-45ae-b122-4d9c53e43df2",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "g11H5ogFQFpqVfv9",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "=당신은 대한민국의 AI 전문 회사 \"AI BRIDGE\"\"의 마케팅 블로그 포스트 초안 작성 담당자입니다. 아래 내용을 참고하여 당사와 거래를 유도할 수 있는 블로그 포스트 콘텐츠를 생성해 주세요.\n\n* 오늘 날짜 : {{ $now }}\n* 입력 키워드: \"{{ $('FROM').item.json.keyword }}\"\n\n📌 다음과 같은 작업을 수행하세요: \n\n1. **데이터 기반 블로그 포스트 구성**\n   - 사용자로부터 전달 받은 정보와 아래 내용을 참고하여 AI 관련 블로그 포스트 초안을 한글로 작성해 주세요.\n   - 정리 형식은 Markdown으로 출력합니다.  \n \n\n2. **SEO 최적화된 블로그 콘텐츠 작성**\n   - 톤은 전문적이되 이해하기 쉬운 문체로, AI 도입이 필요한 고객을 대상으로 작성하세요.\n   - 포스트의 주요 목적은 잠재 고객의 AI 시스템 또는 자동화 도입 서비스 계약 유도입니다.\n   - 총 1800~2200자 내외의 블로그 초안을 생성하세요.\n   - 키워드는 자연스럽게 title, body, slug 설명에 포함하세요.\n\n3. ** AI BRIDGE 특장점-- \n   - 경력 : 200여개 이상 고객사 거래 중\n   - 장점 : AI 시스템 도입 및 관련 교육 제공\n   - 상품 : AI 업무 자동화 시스템 구축\n   - 이메일 : \"\"leo.jin@aibridge.co.kr\"\"\n \n4. **구성**\n   - 서론 : 사용자로부터 전달 받은 정보의 주요 내용을 활용한 도입부\n   - 본론 : 사용자로부터 전달 받은 정보 상세 내용을 활용한 구체적인 수치, 자료, 테이블 제시 및 AI BRIDGE 특장점 연계 또는 강조\n   - 마무리 : 서론 및 본론 요약 후 AI BRIDGE를 통한 AI 도입 계획 권장 및 연락처 제공 \n\n\n5. **최종 출력 포맷**\n   - 다음 JSON 구조에 맞춰 결과를 출력하세요:\n\n```json\n{\n  \"\"slug\"\": \"\"자동 생성된 SEO-friendly 슬러그\"\",\n  \"\"title\"\":\"\"콘텐츠로 독자를 유입시킬 만한 훅킹 제목 (50~60자 이내)\"\",\n  \"\"body\"\": \"\"자동 생성된 블로그 포스트 초안 (Markdown 형식, 1800~2200자 내외)\"\",\n  \"\"cover_img\"\" : \"\"Simple blog post cover image generation prompt in English. Image must be simple and not have numbers or letters\"\"\n}"
+            },
+            {
+              "content": "={{ $json.output[0].content.toJsonString() }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        -400
+      ],
+      "id": "691542be-ed32-4c60-a4d1-9f74b86dc4d8",
+      "name": "Content GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ytw7vBmi9IDnlrzp",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Perplexity": {
+      "main": [
+        [
+          {
+            "node": "Research GPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FROM": {
+      "main": [
+        [
+          {
+            "node": "Perplexity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research GPT",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research GPT": {
+      "main": [
+        [
+          {
+            "node": "Content GPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Perplexity": [
+      {
+        "json": {
+          "id": "0e0cf1e8-448c-4c80-9f51-5f54e1fb6f0c",
+          "model": "sonar",
+          "created": 1764936620,
+          "usage": {
+            "prompt_tokens": 297,
+            "completion_tokens": 1005,
+            "total_tokens": 1302,
+            "search_context_size": "low",
+            "cost": {
+              "input_tokens_cost": 0,
+              "output_tokens_cost": 0.001,
+              "request_cost": 0.005,
+              "total_cost": 0.006
+            }
+          },
+          "citations": [
+            "https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-an-ai-agent",
+            "https://aws.amazon.com/what-is/ai-agents/",
+            "https://www.nvidia.com/en-us/glossary/ai-agents/",
+            "https://cloud.google.com/discover/what-are-ai-agents",
+            "https://www.salesforce.com/agentforce/ai-agents/",
+            "https://en.wikipedia.org/wiki/Intelligent_agent",
+            "https://www.geeksforgeeks.org/artificial-intelligence/agents-artificial-intelligence/",
+            "https://www.ibm.com/think/topics/ai-agents",
+            "https://news.microsoft.com/source/features/ai/ai-agents-what-they-are-and-how-theyll-change-the-way-we-work/",
+            "https://www.youtube.com/watch?v=FwOTs4UxQS4"
+          ],
+          "search_results": [
+            {
+              "title": "What is an AI agent? - McKinsey",
+              "url": "https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-an-ai-agent",
+              "date": "2025-03-25",
+              "last_updated": "2025-12-05",
+              "snippet": "AI agents are the tools we use to interact with AI. They can automate and perform complex tasks, such as natural language processing, ...",
+              "source": "web"
+            },
+            {
+              "title": "What are AI Agents? - Artificial Intelligence - AWS",
+              "url": "https://aws.amazon.com/what-is/ai-agents/",
+              "date": "2025-11-19",
+              "last_updated": "2025-12-05",
+              "snippet": "An artificial intelligence (AI) agent is a software program that can interact with its environment, collect data, and use that data to perform self-directed ...",
+              "source": "web"
+            },
+            {
+              "title": "What are AI Agents? | NVIDIA Glossary",
+              "url": "https://www.nvidia.com/en-us/glossary/ai-agents/",
+              "date": "2025-02-05",
+              "last_updated": "2025-12-04",
+              "snippet": "AI agents are advanced AI systems designed to autonomously reason, plan, and execute complex tasks based on high-level goals.",
+              "source": "web"
+            },
+            {
+              "title": "What are AI agents? Definition, examples, and types | Google Cloud",
+              "url": "https://cloud.google.com/discover/what-are-ai-agents",
+              "date": "2025-04-12",
+              "last_updated": "2025-12-05",
+              "snippet": "AI agents are software systems that use AI to pursue goals and complete tasks on behalf of users. They show reasoning, planning, and memory.",
+              "source": "web"
+            },
+            {
+              "title": "AI Agents: Definition, Types, Examples - Salesforce",
+              "url": "https://www.salesforce.com/agentforce/ai-agents/",
+              "date": "2025-05-19",
+              "last_updated": "2025-11-20",
+              "snippet": "AI agents are a type of artificial intelligence (AI) system that can understand and respond to customer inquiries without human intervention.",
+              "source": "web"
+            },
+            {
+              "title": "Intelligent agent - Wikipedia",
+              "url": "https://en.wikipedia.org/wiki/Intelligent_agent",
+              "date": "2005-09-20",
+              "last_updated": "2025-12-04",
+              "snippet": "In artificial intelligence, an intelligent agent is an entity that perceives its environment, takes actions autonomously to achieve goals, and may improve ...",
+              "source": "web"
+            },
+            {
+              "title": "Agents in AI - GeeksforGeeks",
+              "url": "https://www.geeksforgeeks.org/artificial-intelligence/agents-artificial-intelligence/",
+              "date": "2025-08-14",
+              "last_updated": "2025-12-05",
+              "snippet": "An artificial intelligence (AI) agent is a software program that can interact with its environment, collect data and use that data to perform ...",
+              "source": "web"
+            },
+            {
+              "title": "What Are AI Agents? | IBM",
+              "url": "https://www.ibm.com/think/topics/ai-agents",
+              "date": "2024-07-03",
+              "last_updated": "2025-11-17",
+              "snippet": "An artificial intelligence (AI) agent refers to a system or program that is capable of autonomously performing tasks on behalf of a user or another system.",
+              "source": "web"
+            },
+            {
+              "title": "AI agents — what they are, and how they'll change the way we work",
+              "url": "https://news.microsoft.com/source/features/ai/ai-agents-what-they-are-and-how-theyll-change-the-way-we-work/",
+              "date": "2024-11-19",
+              "last_updated": "2025-12-05",
+              "snippet": "Agents are like layers on top of the language models that observe and collect information, provide input to the model and together generate an ...",
+              "source": "web"
+            },
+            {
+              "title": "AI Agents, Clearly Explained - YouTube",
+              "url": "https://www.youtube.com/watch?v=FwOTs4UxQS4",
+              "date": "2025-04-08",
+              "last_updated": "2025-12-05",
+              "snippet": "My AI Toolkit: https://academy.jeffsu.org/ai-toolkit?utm_source=youtube&utm_medium=video&utm_campaign=177 Understanding AI Agents doesn't ...",
+              "source": "web"
+            }
+          ],
+          "object": "chat.completion",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "### AI Agent: 정의 및 핵심 특징\n\nAI 에이전트(AI Agent)는 사용자나 시스템을 대신해 자율적으로 목표를 달성하기 위해 작업을 수행하는 소프트웨어 시스템입니다. 단순한 명령 수행을 넘어, 환경을 인식하고, 계획을 세우며, 학습과 반복을 통해 복잡한 과제를 해결할 수 있습니다.\n\n---\n\n#### 🔑 주요 특징\n\n- **자율성(Autonomy):** 인간의 지속적인 개입 없이 스스로 결정을 내리고 행동합니다.\n- **목표 지향성(Goal-driven):** 사전에 설정된 목표를 달성하기 위해 최적의 행동을 선택합니다.\n- **환경 인식(Perception):** 주변 환경(디지털/물리적)에서 데이터를 수집하고 이를 기반으로 판단합니다.\n- **학습 및 적응(Adaptability):** 경험을 통해 성능을 개선하고 상황 변화에 대응합니다.\n- **협업(Collaboration):** 다른 에이전트나 인간과 협력해 복잡한 작업을 수행할 수 있습니다.\n\n---\n\n#### 🔄 작동 방식\n\n1. **목표 설정:** 사용자 또는 시스템이 에이전트에게 과제를 부여합니다.\n2. **계획 및 분해:** 에이전트는 과제를 세부 작업으로 나누고, 필요한 자원과 도구를 할당합니다.\n3. **실행 및 반복:** 각 하위 작업을 수행하며, 결과에 따라 추가 입력이나 피드백을 요청할 수 있습니다.\n4. **결과 제공 및 학습:** 최종 결과를 제공하고, 피드백을 통해 다음 작업에 반영합니다.\n\n---\n\n#### 📌 AI 에이전트 vs AI 어시스턴트 vs 봇\n\n| 구분 | 목적 | 자율성 | 복잡도 | 상호작용 |\n|------|------|--------|--------|----------|\n| **AI 에이전트** | 자율적, 다단계 과제 수행 | 높음 | 높음 | 능동적 |\n| **AI 어시스턴트** | 사용자 요청에 응답 | 중간 | 중간 | 반응적 |\n| **봇** | 단순 자동화 | 낮음 | 낮음 | 반응적 |\n\n---\n\n#### 🌐 주요 적용 사례\n\n- **고객 서비스:** 문의 응답, 문제 해결, 상담 지원 (예: Salesforce Agentforce)\n- **생산성 향상:** 콘텐츠 생성, 코드 작성, 문서 요약 (예: Microsoft 365 Copilot, ChatGPT)\n- **엔터프라이즈 자동화:** 업무 프로세스, 데이터 분석, 시스템 통합\n- **로보틱스:** 자율주행차, 물류 자동화, 스마트 팩토리\n\n---\n\n#### 📚 참고 자료\n\n- [McKinsey: What is an AI agent?](https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-an-ai-agent)\n- [AWS: What are AI Agents?](https://aws.amazon.com/what-is/ai-agents/)\n- [NVIDIA Glossary: AI Agents](https://www.nvidia.com/en-us/glossary/ai-agents/)\n- [Google Cloud: What are AI agents?](https://cloud.google.com/discover/what-are-ai-agents)\n- [Salesforce: AI Agents](https://www.salesforce.com/agentforce/ai-agents/)\n\n---\n\n#### 💡 마케팅 인사이트\n\n- AI 에이전트는 단순 자동화를 넘어 **비즈니스 프로세스 혁신**의 핵심 도구로 부상하고 있습니다.\n- 기업은 자체 데이터와 도메인 지식을 활용해 **맞춤형 에이전트**를 개발할 수 있어, 경쟁력 확보에 유리합니다.\n- 고객 경험(CX) 및 내부 효율성 향상에 직접 기여하므로, **B2B 및 B2C 마케팅**에서 차별화 포인트로 활용 가능합니다.\n\n---\n\nAI 에이전트는 단순한 도구가 아닌, **디지털 노동력**으로서 조직과 개인의 업무 방식을 근본적으로 변화시키고 있습니다."
+              },
+              "delta": {
+                "role": "assistant",
+                "content": ""
+              },
+              "finish_reason": "stop"
+            }
+          ]
+        }
+      }
+    ],
+    "FROM": [
+      {
+        "json": {
+          "keyword": "ai agent",
+          "submittedAt": "2025-12-05T20:59:27.033+09:00",
+          "formMode": "test"
+        }
+      }
+    ],
+    "Research GPT": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_032f9bb6ec9caacf006932d8db59d88195b36c7fbdc7917142",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "research": {
+                      "definition": "An artificial intelligence (AI) agent refers to a system or program that is capable of autonomously performing tasks on behalf of a user or another system.",
+                      "articles": [
+                        {
+                          "title": "AWS, \"챗봇 넘어 누구나 쉽게 만드는 AI 에이전트로 '창조의 자유' 열렸다\"",
+                          "source": "Daum",
+                          "date": "1 day ago",
+                          "url": "https://v.daum.net/v/20251204181115191"
+                        },
+                        {
+                          "title": "[AWS 리인벤트 2025] AI 에이전트 시대의 서막",
+                          "source": "THE AI",
+                          "date": "1 day ago",
+                          "url": "https://www.newstheai.com/news/articleView.html?idxno=10036"
+                        },
+                        {
+                          "title": "'AI 에이전트'로 누리는 자유 …AWS, 차세대 기술 대거 공개",
+                          "source": "디지털투데이",
+                          "date": "1 day ago",
+                          "url": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=610062"
+                        }
+                      ]
+                    },
+                    "citations": {
+                      "citation": "https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-an-ai-agent,https://aws.amazon.com/what-is/ai-agents/,https://www.nvidia.com/en-us/glossary/ai-agents/,https://cloud.google.com/discover/what-are-ai-agents,https://www.salesforce.com/agentforce/ai-agents/,https://en.wikipedia.org/wiki/Intelligent_agent,https://www.geeksforgeeks.org/artificial-intelligence/agents-artificial-intelligence/,https://www.ibm.com/think/topics/ai-agents,https://news.microsoft.com/source/features/ai/ai-agents-what-they-are-and-how-theyll-change-the-way-we-work/,https://www.youtube.com/watch?v=FwOTs4UxQS4"
+                    }
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      }
+    ],
+    "Content GPT": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_046546632cf9c74c006932dcc8e9ac8190b5b9745670a46dcb",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": {
+                    "slug": "ai-agent-blog-2025-12-05",
+                    "title": "AI 에이전트: 비즈니스 혁신을 이끄는 미래 기술",
+                    "body": "## AI 에이전트: 비즈니스 혁신의 핵심\n\n인공지능(AI) 에이전트는 사용자나 다른 시스템을 대표해 자율적으로 작업을 수행할 수 있는 시스템 또는 프로그램을 가리킵니다. 최근 AWS, AI 기반 챗봇 개발 플랫폼으로 AI 에이전트의 창조적 활용을 열었으며, 'AI 에이전트' 시대가 서막을 열고 있습니다.\n\nAWS의 새로운 기술 대거를 공개한 것은 물론, THE AI와 디지털투데이 등에서도 AI 에이전트의 중요성을 강조하며 AI 에이전트 사용의 혜택과 자유를 살펴보고 있습니다. AI 에이전트는 기업과 조직에 혁신을 가져다주며, AI 기술의 확대된 적용 영역으로 주목받고 있습니다.\n\n### AI 에이전트의 역할과 장점\n\nAI 에이전트는 다양한 업무 영역에서 중요한 역할을 수행합니다. 그들은 합리적인 의사 결정을 내릴 수 있는 것으로 알려져 있고, 이는 업무 분석, 예측 및 문제 해결에 큰 도움을 줍니다. AI 에이전트를 통해 업무 프로세스를 자동화하고 최적화할 수 있으며, 이는 생산성 향상과 비용 절감에 이어 더 나은 경영 의사 결정을 가능케 합니다.\n\nAI BRIDGE는 200여개 이상의 고객사 거래 경험을 보유하고 있으며, AI 시스템 도입 및 관련 교육을 제공하는 데 강점을 보이고 있습니다. 또한 AI 업무 자동화 시스템의 구축에 특화되어 있어, 기업들이 AI 에이전트 기술을 보다 효과적으로 활용할 수 있도록 지원합니다.\n\n### AI BRIDGE를 통한 AI 도입 계획\n\nAI BRIDGE는 고객사의 요구 및 업종 특성에 맞는 맞춤형 AI 솔루션을 제공합니다. 기업의 업무 프로세스를 자동화하고 최적화함으로써 생산성 향상과 비즈니스 성과 향상에 기여합니다. AI BRIDGE를 통해 AI 에이전트의 도입 계획을 검토하고 구체화하시면 미래 비즈니스 경쟁력을 확보할 수 있습니다.\n\nAI 에이전트는 기업의 업무 혁신과 경쟁력 강화를 위한 빅 키워드입니다. AI BRIDGE는 이러한 비즈니스 혁신을 위한 파트너로 고객사를 지원하고 있으며, AI 에이전트 도입의 필요성과 가치를 실제 사례로 확인할 수 있습니다.\n\nAI 에이전트의 역할과 가치를 더 자세히 알고 싶다면 AI BRIDGE의 친절한 담당자에게 문의하세요.\n\nAI BRIDGE 이메일: leo.jin@aibridge.co.kr",
+                    "cover_img": "Simple blog post cover image generation prompt in English. Image must be simple and not have numbers or letters"
+                  }
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "versionId": "7748be79-64ae-41f2-9875-b7abb8d8b1a6",
+  "activeVersionId": null,
+  "versionCounter": 12,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-12-05T11:56:45.467Z",
+      "createdAt": "2025-12-05T11:56:45.467Z",
+      "id": "KP3HdGyCxxrhjHiO",
+      "name": "wordpress"
+    },
+    {
+      "updatedAt": "2025-12-05T11:56:51.880Z",
+      "createdAt": "2025-12-05T11:56:51.880Z",
+      "id": "RFBJhW8TXeLQCKCV",
+      "name": "blog"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-12-05T11:53:46.530Z",
+      "createdAt": "2025-12-05T11:53:46.530Z",
+      "role": "workflow:owner",
+      "workflowId": "2I7LYsq4scwZVoLb",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

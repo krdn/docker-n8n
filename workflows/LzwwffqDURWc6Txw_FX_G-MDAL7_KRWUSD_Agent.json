@@ -1,0 +1,809 @@
+{
+  "updatedAt": "2025-11-22T04:54:37.412Z",
+  "createdAt": "2025-11-21T07:54:12.603Z",
+  "id": "LzwwffqDURWc6Txw",
+  "name": "FX_G-MDAL7_KRWUSD_Agent",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "4f8ebb4b-906d-4abb-a400-d66acb9ca2b6",
+      "name": "매일 아침 8시 실행",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        128
+      ],
+      "notes": "한국 주식시장 개장 전 실행"
+    },
+    {
+      "parameters": {
+        "url": "https://v6.exchangerate-api.com/v6/YOUR_API_KEY/pair/USD/KRW",
+        "options": {}
+      },
+      "id": "fd627592-3e54-447a-8c4f-b8eec3744d14",
+      "name": "1. 실시간 환율(USD/KRW)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        304,
+        128
+      ],
+      "notes": "ExchangeRate-API 키 필요"
+    },
+    {
+      "parameters": {
+        "url": "https://api.stlouisfed.org/fred/series/observations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "series_id",
+              "value": "DGS10"
+            },
+            {
+              "name": "api_key",
+              "value": "YOUR_FRED_API_KEY"
+            },
+            {
+              "name": "file_type",
+              "value": "json"
+            },
+            {
+              "name": "sort_order",
+              "value": "desc"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "461af302-58a9-4c11-9986-04d81c9b69af",
+      "name": "2. 미국 10년물 국채금리",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        528,
+        128
+      ],
+      "notes": "FRED API 키 필요 (미국 경제 핵심 지표)"
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/top-headlines",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "economy"
+            },
+            {
+              "name": "category",
+              "value": "business"
+            },
+            {
+              "name": "language",
+              "value": "en"
+            },
+            {
+              "name": "apiKey",
+              "value": "YOUR_NEWS_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "01e1653f-4786-4849-8e80-7acb849d28e8",
+      "name": "3. 주요 경제 뉴스",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        752,
+        128
+      ],
+      "notes": "시장 심리 파악용"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 데이터를 AI가 읽기 좋은 형태로 정리합니다.\nconst fxRate = items[0].json.conversion_rate || 'Data Error';\nconst bondYield = $('2. 미국 10년물 국채금리').first().json.observations[0].value || 'Data Error';\nconst newsArticles = $('3. 주요 경제 뉴스').first().json.articles.slice(0, 3).map(a => `- ${a.title}`).join('\\n');\n\nreturn {\n  json: {\n    context_data: `\n    [Market Data]\n    1. USD/KRW Exchange Rate: ${fxRate}\n    2. US 10Y Treasury Yield: ${bondYield}%\n    \n    [Key News Headlines]\n    ${newsArticles}\n    `\n  }\n};\n"
+      },
+      "id": "78260368-abde-47b9-ba89-fad280044bb7",
+      "name": "데이터 취합 (Context)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        128
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cc92c22d-0c86-4588-b3ea-1cd8bec22afd",
+      "name": "AI FX 전략가 (GPT-4o)",
+      "type": "n8n-nodes-base.openAiRobot",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        128
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {},
+      "id": "c4dc020f-411e-4c23-9b57-4f361f5da28f",
+      "name": "수동 테스트 버튼",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        288
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "86d9b097-46d3-414b-b25a-09f35c54ce01",
+      "name": "Cron_Daily",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 2,
+      "position": [
+        -704,
+        944
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "pair",
+              "value": "USDKRW"
+            },
+            {
+              "name": "baseCurrency",
+              "value": "USD"
+            },
+            {
+              "name": "quoteCurrency",
+              "value": "KRW"
+            }
+          ],
+          "number": [
+            {
+              "name": "thresholdStrong",
+              "value": 0.5
+            },
+            {
+              "name": "thresholdWeak",
+              "value": -0.5
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "967a13a5-115e-4f21-bcd3-2564f4191492",
+      "name": "Set_Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        944
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplefx.com/timeseries",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "USDKRW"
+            },
+            {
+              "name": "interval",
+              "value": "1day"
+            },
+            {
+              "name": "outputsize",
+              "value": "60"
+            },
+            {
+              "name": "apikey",
+              "value": "={{$env.FX_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "c87829d6-21ab-4ceb-9032-2aea6a46abdf",
+      "name": "HTTP_FX_USDKRW",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplebond.com/us",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.BOND_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "1468438a-5297-46b8-afff-a9bd5f8817d9",
+      "name": "HTTP_Bond_US",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplebond.com/kr",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.BOND_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "82ce3b70-78b7-448c-9a6f-ea29bf24f72d",
+      "name": "HTTP_Bond_KR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        768
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplemacro.com/us",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.MACRO_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "1dc0e680-6c66-453a-82a3-159d2ccb7317",
+      "name": "HTTP_Macro_US",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        944
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplemacro.com/kr",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.MACRO_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "21a7c98d-de3d-4c75-b68e-dfd66ad4974e",
+      "name": "HTTP_Macro_KR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplevol.com/vix_fx",
+        "options": {}
+      },
+      "id": "93660fce-48d3-49f6-a0d1-88c939d634bc",
+      "name": "HTTP_Volatility",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        1264
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplecftc.com/usd",
+        "options": {}
+      },
+      "id": "a9ff2e9f-75e0-4a97-b062-7ef1bcf4d9d7",
+      "name": "HTTP_CFTC_USD",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        1424
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.exampleflow.com/em",
+        "options": {}
+      },
+      "id": "1533c0fe-986d-439e-bc7d-dc5bbd7f0f6e",
+      "name": "HTTP_Flows_EM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        96,
+        1584
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "88604642-394a-4926-9b2c-a9dbd30a4aae",
+      "name": "Merge_1_FX_BondUS",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        368,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "f719b68b-283f-4eba-8e63-7fb16609d6cf",
+      "name": "Merge_2_Add_BondKR",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        560,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "f923fe0b-b1e4-4980-b578-0301403d7de4",
+      "name": "Merge_3_Add_MacroUS",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        752,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "a37fdff5-8c4b-4e0e-bb88-924b899b9d11",
+      "name": "Merge_4_Add_MacroKR",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        960,
+        768
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "308287c0-629f-473e-823f-83c156f9bad7",
+      "name": "Merge_5_Add_Vol",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "1729136f-3671-4f8e-b7d4-25b4d72a58ae",
+      "name": "Merge_6_Add_CFTC",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        912
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "1e28931d-336d-4a3b-a0f7-dfa9613ae3d5",
+      "name": "Merge_7_Add_Flows",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        976
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e677d527-5ce0-4537-83cb-97e70051181f",
+      "name": "Function_GMDAL7_Scoring",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        976
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a18b5b4c-1cdb-4e8a-abf5-37613f9a03e2",
+      "name": "OpenAI_FX_Report",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 2,
+      "position": [
+        2048,
+        912
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{Math.abs($json[\"composite\"] || 0)}}",
+              "operation": "larger",
+              "value2": 0.3
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "45e56950-d021-4366-8af0-372f1cb4e17b",
+      "name": "IF_SignificantMove",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2304,
+        912
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "bd956e98-8788-48aa-9760-6df8c25a8509",
+      "name": "Telegram_Send",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 2,
+      "position": [
+        2560,
+        816
+      ]
+    }
+  ],
+  "connections": {
+    "매일 아침 8시 실행": {
+      "main": [
+        [
+          {
+            "node": "1. 실시간 환율(USD/KRW)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. 실시간 환율(USD/KRW)": {
+      "main": [
+        [
+          {
+            "node": "2. 미국 10년물 국채금리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. 미국 10년물 국채금리": {
+      "main": [
+        [
+          {
+            "node": "3. 주요 경제 뉴스",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. 주요 경제 뉴스": {
+      "main": [
+        [
+          {
+            "node": "데이터 취합 (Context)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "수동 테스트 버튼": {
+      "main": [
+        [
+          {
+            "node": "1. 실시간 환율(USD/KRW)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set_Config": {
+      "main": [
+        [
+          {
+            "node": "HTTP_FX_USDKRW",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Bond_US",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Bond_KR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Macro_US",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Macro_KR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Volatility",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_CFTC_USD",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Flows_EM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_FX_USDKRW": {
+      "main": [
+        [
+          {
+            "node": "Merge_1_FX_BondUS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Bond_US": {
+      "main": [
+        [
+          {
+            "node": "Merge_1_FX_BondUS",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_1_FX_BondUS": {
+      "main": [
+        [
+          {
+            "node": "Merge_2_Add_BondKR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Bond_KR": {
+      "main": [
+        [
+          {
+            "node": "Merge_2_Add_BondKR",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_2_Add_BondKR": {
+      "main": [
+        [
+          {
+            "node": "Merge_3_Add_MacroUS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Macro_US": {
+      "main": [
+        [
+          {
+            "node": "Merge_3_Add_MacroUS",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_3_Add_MacroUS": {
+      "main": [
+        [
+          {
+            "node": "Merge_4_Add_MacroKR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Macro_KR": {
+      "main": [
+        [
+          {
+            "node": "Merge_4_Add_MacroKR",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_4_Add_MacroKR": {
+      "main": [
+        [
+          {
+            "node": "Merge_5_Add_Vol",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Volatility": {
+      "main": [
+        [
+          {
+            "node": "Merge_5_Add_Vol",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_5_Add_Vol": {
+      "main": [
+        [
+          {
+            "node": "Merge_6_Add_CFTC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_CFTC_USD": {
+      "main": [
+        [
+          {
+            "node": "Merge_6_Add_CFTC",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_6_Add_CFTC": {
+      "main": [
+        [
+          {
+            "node": "Merge_7_Add_Flows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Flows_EM": {
+      "main": [
+        [
+          {
+            "node": "Merge_7_Add_Flows",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "abc32d25-830b-4d0c-bf5b-8857d59a5929",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T07:54:12.603Z",
+      "createdAt": "2025-11-21T07:54:12.603Z",
+      "role": "workflow:owner",
+      "workflowId": "LzwwffqDURWc6Txw",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

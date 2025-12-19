@@ -1,0 +1,203 @@
+{
+  "updatedAt": "2025-12-03T11:14:34.620Z",
+  "createdAt": "2025-11-30T07:45:00.341Z",
+  "id": "TQoGQUMOAICHYqNl",
+  "name": "코인리더스 하단 워크",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/customsearch/v1",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "AIzaSyAjK9r1EQ7B_NDCSMggNKyK-Tqu5qlCT1E"
+            },
+            {
+              "name": "cx",
+              "value": "a207c3ad78b424294"
+            },
+            {
+              "name": "q",
+              "value": "={{ $json.search_query }}"
+            },
+            {
+              "name": "searchType",
+              "value": "image"
+            },
+            {
+              "name": "num",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        640,
+        -256
+      ],
+      "id": "f846f9f7-2c77-4eb4-946e-55fe6b18ca5f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a0e3e44-3ae7-4398-9dd8-994f2d92b57e",
+              "name": "url",
+              "value": "={{ $json.items[0].link }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        832,
+        -256
+      ],
+      "id": "8c570838-1015-4935-a9ca-5fa05e80ceae",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        -256
+      ],
+      "id": "e02af23b-5853-44b7-a219-9cd6c427d120",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab53e51b-ad67-4420-8532-1bb60d95972d",
+              "name": "=search_query",
+              "value": "={{ $json.query }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        -256
+      ],
+      "id": "d2188ac0-a051-42d6-97f5-ec14d5e913b8",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n[사용자 인증 정보](https://console.cloud.google.com/apis/credentials?project=perceptive-map-469913-k0)",
+        "height": 112,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        -432
+      ],
+      "id": "e3d4d7f0-1cb3-41f3-9aef-bce24821a527",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "XRP 리플 로고"
+        }
+      }
+    ]
+  },
+  "versionId": "2d114bdc-d1eb-4e83-b898-bdf80050e884",
+  "activeVersionId": "2d114bdc-d1eb-4e83-b898-bdf80050e884",
+  "versionCounter": 12,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:12:09.044Z",
+      "createdAt": "2025-11-16T13:12:09.044Z",
+      "id": "aZu9uzC2NbhGEzcP",
+      "name": "study"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-30T07:45:00.341Z",
+      "createdAt": "2025-11-30T07:45:00.341Z",
+      "role": "workflow:owner",
+      "workflowId": "TQoGQUMOAICHYqNl",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

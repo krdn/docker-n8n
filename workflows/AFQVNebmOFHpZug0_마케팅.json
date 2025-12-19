@@ -1,0 +1,62 @@
+{
+  "updatedAt": "2025-11-23T04:00:16.253Z",
+  "createdAt": "2025-11-22T09:37:41.442Z",
+  "id": "AFQVNebmOFHpZug0",
+  "name": "마케팅",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n\n- 학생이 필요한 맞춤형 학부모에게 추가 강의 정보 전달\n- 학원의 장점등을 Yoube, 인스타, 페이스북, 트위터 등에 바이럴 마케팅 자동으로 생셩하기\n- ",
+        "width": 608
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1840,
+        -752
+      ],
+      "id": "aa1e2eaa-d6bb-4a5b-b669-7128e098fac2",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "74c3817b-ed6f-4e03-880f-63dc99970a0b",
+  "activeVersionId": null,
+  "versionCounter": 5,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:37:41.442Z",
+      "createdAt": "2025-11-22T09:37:41.442Z",
+      "role": "workflow:owner",
+      "workflowId": "AFQVNebmOFHpZug0",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

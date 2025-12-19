@@ -1,0 +1,132 @@
+{
+  "updatedAt": "2025-11-16T13:11:03.421Z",
+  "createdAt": "2025-11-09T04:09:44.091Z",
+  "id": "5hmrVYMJe9e6hSOr",
+  "name": "AI 리서치",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n\nhttps://youtu.be/FUA0lSY-W2s?si=Ul201ktWF6JYj17P\n\n\n1. 질문의 의도와 내용을 분석\n2. 질문을 다방면으로 생각해보기 위해 지식 찾기\n3. 배경 지식과 질문을 분석하여 확장 가능한 방향을 모색\n\n3의 생성된 목록 기반\n4. 질의의 내용을 확장하여 문서를 수집\n",
+        "height": 320,
+        "width": 528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        -144
+      ],
+      "id": "5f9719c2-72ec-4da4-8c8a-d843613b3631",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        208
+      ],
+      "id": "8c302170-345a-4685-b505-baa1fee5e765",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        304,
+        208
+      ],
+      "id": "c6725bb9-81e6-4905-ad7d-4d7c89bac8f4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-pro-exp",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        176,
+        416
+      ],
+      "id": "7e409c0b-37cd-444e-81e2-d2bb6cdeb6ea",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "g63PhpP72tYoltLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "1ae30860-8a79-4513-8d9d-f84aedf47db6",
+  "activeVersionId": null,
+  "versionCounter": 5,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:11:00.958Z",
+      "createdAt": "2025-11-16T13:11:00.958Z",
+      "id": "B9UiztCWf1B18zoc",
+      "name": "증권"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-09T04:09:44.091Z",
+      "createdAt": "2025-11-09T04:09:44.091Z",
+      "role": "workflow:owner",
+      "workflowId": "5hmrVYMJe9e6hSOr",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "updatedAt": "2025-12-03T12:27:05.519Z",
+  "createdAt": "2025-12-02T07:54:20.482Z",
+  "id": "GPTIasB17Aphkqvv",
+  "name": "Telegram",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b2dee14d-ad28-4aaf-a084-530a024f40d3",
+      "name": "Telegram Trigger",
+      "webhookId": "42759383-5e9a-4d42-a4ac-ad99a5be7b82",
+      "credentials": {
+        "telegramApi": {
+          "id": "j5cWwW62953vuO7A",
+          "name": "krdn_n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "6761839387",
+        "text": "테스트 메시지...",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        -288
+      ],
+      "id": "3de785fa-dce1-4373-88b4-01c93403cd79",
+      "name": "Send a text message",
+      "webhookId": "98daccba-50a1-432f-8b4e-50005a3eda0f",
+      "credentials": {
+        "telegramApi": {
+          "id": "j5cWwW62953vuO7A",
+          "name": "krdn_n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "6761839387",
+        "message": "dddd",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        0
+      ],
+      "id": "80bd2db9-0a12-46c0-9047-2682086695ac",
+      "name": "Send message and wait for response",
+      "webhookId": "d7c02fcf-3507-4059-9ecf-720ede841947",
+      "credentials": {
+        "telegramApi": {
+          "id": "j5cWwW62953vuO7A",
+          "name": "krdn_n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "13618f8d-66c6-465a-b13f-d4e28fd6f707",
+  "activeVersionId": null,
+  "versionCounter": 8,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-12-02T07:54:20.482Z",
+      "createdAt": "2025-12-02T07:54:20.482Z",
+      "role": "workflow:owner",
+      "workflowId": "GPTIasB17Aphkqvv",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

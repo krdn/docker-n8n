@@ -1,0 +1,61 @@
+{
+  "updatedAt": "2025-11-22T09:50:02.990Z",
+  "createdAt": "2025-11-22T09:11:24.993Z",
+  "id": "EkOB9IJCkuQJQrBO",
+  "name": "성적 분석",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n- 성적 : OCR \n- 장점, 단점 : \n- 학습 태도: 성실성\n- 부모의 관심도:\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        -320
+      ],
+      "id": "55d41228-b6b2-4b57-b87f-e86a5acc6364",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "b6d1a0dc-cb29-463b-948d-60b3e7449095",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:11:24.993Z",
+      "createdAt": "2025-11-22T09:11:24.993Z",
+      "role": "workflow:owner",
+      "workflowId": "EkOB9IJCkuQJQrBO",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "updatedAt": "2025-11-16T13:11:52.403Z",
+  "createdAt": "2025-10-27T05:11:41.845Z",
+  "id": "Y5WO8CJFvcMj2Uxt",
+  "name": "Very quick quickstart",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAllPeople",
+        "returnAll": true
+      },
+      "id": "cbb6afcc-f900-434d-ad2e-affb31ccf7a9",
+      "name": "Customer Datastore",
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "position": [
+        912,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## About the very quick quickstart workflow\n\nThis is an incomplete workflow, used in the [very quick quickstart](https://docs.n8n.io//try-it-out/quickstart/) tutorial.",
+        "height": 220,
+        "width": 300
+      },
+      "id": "1eb939c0-e391-4e3b-9751-889da2de7cf7",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Get fake sample data**",
+        "height": 300,
+        "width": 220
+      },
+      "id": "c53a8591-9efe-4fb8-993b-6cc309f3240e",
+      "name": "Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        848,
+        432
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Extract data and prepare it for use in the next node**",
+        "height": 300,
+        "width": 220
+      },
+      "id": "c7e35ca4-b180-4280-9e43-a5dda5d3ea97",
+      "name": "Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1136,
+        432
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "94bba884-5cef-4fe6-ba7d-cc7dbe49839c",
+      "name": "When clicking \"Test Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        672,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df041e3c-fc09-4ba2-8e6b-37f2c6a02526",
+              "name": "customer_id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "id": "bf288953-4fef-4f55-a45f-c223714919c0",
+              "name": "customer_name",
+              "type": "string",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "id": "1cff0b21-6740-4697-9d2c-9bcb045af0be",
+              "name": "customer_description",
+              "type": "string",
+              "value": "={{ $json.notes }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f6d22d64-c77f-415d-9c34-c7106ba4877a",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1200,
+        528
+      ],
+      "typeVersion": 3.3
+    }
+  ],
+  "connections": {
+    "Edit Fields1": {
+      "main": [
+        []
+      ]
+    },
+    "Customer Datastore": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Test Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateId": "1700"
+  },
+  "pinData": {},
+  "versionId": "c9f574b3-2679-4019-a072-c33932a50235",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:11:42.834Z",
+      "createdAt": "2025-11-16T13:11:42.834Z",
+      "id": "a2IwseywRbwd2E0S",
+      "name": "samples"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-10-27T05:11:41.845Z",
+      "createdAt": "2025-10-27T05:11:41.845Z",
+      "role": "workflow:owner",
+      "workflowId": "Y5WO8CJFvcMj2Uxt",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

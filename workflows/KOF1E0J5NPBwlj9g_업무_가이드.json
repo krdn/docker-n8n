@@ -1,0 +1,227 @@
+{
+  "updatedAt": "2025-11-16T13:13:48.499Z",
+  "createdAt": "2025-11-06T04:59:47.205Z",
+  "id": "KOF1E0J5NPBwlj9g",
+  "name": "업무 가이드",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "업무 가이드",
+        "formDescription": "업무에 대한 간략한 설명",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "업무 내용",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dfc8b93d-0c5f-40fc-a660-4f74cdba82ec",
+      "name": "On form submission",
+      "webhookId": "af7903a3-d18e-4318-9fb7-e00a7d66bb6d"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "works_guid",
+        "fields": "=work",
+        "options": {
+          "dateFields": "",
+          "useDotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        -96
+      ],
+      "id": "811ce96a-8568-4469-be5e-d649428a7b3b",
+      "name": "Insert documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "3pbvamTyYG5WAzde",
+          "name": "MongoDB krdn_n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "30811786-c13a-48ca-8d67-d9203d0afe72",
+              "name": "work",
+              "value": "={{ $json['업무 내용'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1d5fcc3a-3d02-452d-8fdc-1ac94d886f2c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "formTitle": "사용자 등록",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "UserName",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {}
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "FullName",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        -192
+      ],
+      "id": "cb9d6ac1-b210-4119-8144-876a06f855ba",
+      "name": "사용자 등록",
+      "webhookId": "35cf8bb5-0f97-4f0e-82c0-4953eaed1db8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb0b4ff8-53be-4dd7-b019-0bf46ea83e6e",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        -224
+      ],
+      "id": "e9ee7ca1-6e5c-4229-b0b7-c6f0cad065fe",
+      "name": "Edit Fields1"
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Insert documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert documents": {
+      "main": [
+        []
+      ]
+    },
+    "사용자 등록": {
+      "main": [
+        [
+          {
+            "node": "Insert documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "업무 내용": "업무 내용을 작성하면 이에 따른 가이드를 만들어주는 n8n AI Agent  작성하기",
+          "submittedAt": "2025-11-06T14:06:42.144+09:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "978d8038-c95b-4d07-b536-e4483ac6f5b0",
+  "activeVersionId": null,
+  "versionCounter": 7,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:13:46.840Z",
+      "createdAt": "2025-11-16T13:13:46.840Z",
+      "id": "rzYKWjizxBK2AMO4",
+      "name": "작업중"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-06T04:59:47.205Z",
+      "createdAt": "2025-11-06T04:59:47.205Z",
+      "role": "workflow:owner",
+      "workflowId": "KOF1E0J5NPBwlj9g",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,609 @@
+{
+  "updatedAt": "2025-11-22T04:54:31.468Z",
+  "createdAt": "2025-11-21T13:24:48.595Z",
+  "id": "cGPtJ2lPwHUQwmyO",
+  "name": "FX_G-MDAL7_KRWUSD_Agent",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "17f12382-786a-4822-b7e8-dc2a2cd19d31",
+      "name": "Cron_Daily",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 2,
+      "position": [
+        -2640,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "pair",
+              "value": "USDKRW"
+            },
+            {
+              "name": "baseCurrency",
+              "value": "USD"
+            },
+            {
+              "name": "quoteCurrency",
+              "value": "KRW"
+            }
+          ],
+          "number": [
+            {
+              "name": "thresholdStrong",
+              "value": 0.5
+            },
+            {
+              "name": "thresholdWeak",
+              "value": -0.5
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "098a4fde-3506-4268-9ad3-f9f3ae7cb4a6",
+      "name": "Set_Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -2432,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplefx.com/timeseries",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "USDKRW"
+            },
+            {
+              "name": "interval",
+              "value": "1day"
+            },
+            {
+              "name": "outputsize",
+              "value": "60"
+            },
+            {
+              "name": "apikey",
+              "value": "={{$env.FX_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "0106e068-9e8c-4050-b797-27ae57c3b53e",
+      "name": "HTTP_FX_USDKRW",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        -368
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplebond.com/us",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.BOND_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "74a47994-4d4b-47ce-a945-1c26176ed0a5",
+      "name": "HTTP_Bond_US",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplebond.com/kr",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.BOND_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "2b44c2fd-cfc0-45cf-8484-a25c74accab6",
+      "name": "HTTP_Bond_KR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplemacro.com/us",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.MACRO_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "a3768fbf-ec59-4ac2-b902-fbe06c63c898",
+      "name": "HTTP_Macro_US",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplemacro.com/kr",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$env.MACRO_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "2898ccbf-6e07-4829-b010-7b23ae283f41",
+      "name": "HTTP_Macro_KR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplevol.com/vix_fx",
+        "options": {}
+      },
+      "id": "b73a232f-1e77-49b1-b5b3-be92ccf21c09",
+      "name": "HTTP_Volatility",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.examplecftc.com/usd",
+        "options": {}
+      },
+      "id": "640bed7f-34f2-4650-a25f-f65968e67947",
+      "name": "HTTP_CFTC_USD",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.exampleflow.com/em",
+        "options": {}
+      },
+      "id": "47e860b4-d56d-4cad-a9a7-a4d9c001ebbd",
+      "name": "HTTP_Flows_EM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        -2192,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "4b7f1783-3e5f-46ec-951c-bf4ca0c4b247",
+      "name": "Merge_1_FX_BondUS",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -1936,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "6c986597-34d0-475e-9cd7-1a55c46e8f5c",
+      "name": "Merge_2_Add_BondKR",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -1728,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "fe176e9b-0aca-4ecf-8139-d6df7c4249a1",
+      "name": "Merge_3_Add_MacroUS",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -1536,
+        -208
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "4a140110-6d44-4e44-9448-fab2e24133f3",
+      "name": "Merge_4_Add_MacroKR",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "59182c78-be2c-475e-92c4-c6c5029d41a2",
+      "name": "Merge_5_Add_Vol",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -1136,
+        -112
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "2f9a90d5-2e40-48cf-ac20-f05cf7cfa5e1",
+      "name": "Merge_6_Add_CFTC",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -928,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "8f08e4cf-4047-4a9c-add9-ca46af71cb3b",
+      "name": "Merge_7_Add_Flows",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -736,
+        -16
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b476402f-b25f-490a-9084-f976a86b1f9e",
+      "name": "Function_GMDAL7_Scoring",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        -16
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8165693d-c26f-4278-9b52-d49b7b56f54d",
+      "name": "OpenAI_FX_Report",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{Math.abs($json[\"composite\"] || 0)}}",
+              "operation": "larger",
+              "value2": 0.3
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "33de2778-1da4-48fe-81ba-ea8f1b80a205",
+      "name": "IF_SignificantMove",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -16
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8bc95912-107e-4ce1-a6f1-c1712916622e",
+      "name": "Telegram_Send",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 2,
+      "position": [
+        272,
+        -112
+      ]
+    }
+  ],
+  "connections": {
+    "Set_Config": {
+      "main": [
+        [
+          {
+            "node": "HTTP_FX_USDKRW",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Bond_US",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Bond_KR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Macro_US",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Macro_KR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Volatility",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_CFTC_USD",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP_Flows_EM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_FX_USDKRW": {
+      "main": [
+        [
+          {
+            "node": "Merge_1_FX_BondUS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Bond_US": {
+      "main": [
+        [
+          {
+            "node": "Merge_1_FX_BondUS",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_1_FX_BondUS": {
+      "main": [
+        [
+          {
+            "node": "Merge_2_Add_BondKR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Bond_KR": {
+      "main": [
+        [
+          {
+            "node": "Merge_2_Add_BondKR",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_2_Add_BondKR": {
+      "main": [
+        [
+          {
+            "node": "Merge_3_Add_MacroUS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Macro_US": {
+      "main": [
+        [
+          {
+            "node": "Merge_3_Add_MacroUS",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_3_Add_MacroUS": {
+      "main": [
+        [
+          {
+            "node": "Merge_4_Add_MacroKR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Macro_KR": {
+      "main": [
+        [
+          {
+            "node": "Merge_4_Add_MacroKR",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_4_Add_MacroKR": {
+      "main": [
+        [
+          {
+            "node": "Merge_5_Add_Vol",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Volatility": {
+      "main": [
+        [
+          {
+            "node": "Merge_5_Add_Vol",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_5_Add_Vol": {
+      "main": [
+        [
+          {
+            "node": "Merge_6_Add_CFTC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_CFTC_USD": {
+      "main": [
+        [
+          {
+            "node": "Merge_6_Add_CFTC",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge_6_Add_CFTC": {
+      "main": [
+        [
+          {
+            "node": "Merge_7_Add_Flows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP_Flows_EM": {
+      "main": [
+        [
+          {
+            "node": "Merge_7_Add_Flows",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ada81d31-3900-4ed2-a17f-61f016265add",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T13:24:48.595Z",
+      "createdAt": "2025-11-21T13:24:48.595Z",
+      "role": "workflow:owner",
+      "workflowId": "cGPtJ2lPwHUQwmyO",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

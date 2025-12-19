@@ -1,0 +1,47 @@
+{
+  "updatedAt": "2025-11-16T13:13:55.239Z",
+  "createdAt": "2025-10-30T01:06:57.135Z",
+  "id": "4qw7CTKMK0l1YyTA",
+  "name": "쓰레드 자동화",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "472cbe0c-69e2-47a8-b608-2ad0945b633c",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:13:46.840Z",
+      "createdAt": "2025-11-16T13:13:46.840Z",
+      "id": "rzYKWjizxBK2AMO4",
+      "name": "작업중"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-10-30T01:06:57.135Z",
+      "createdAt": "2025-10-30T01:06:57.135Z",
+      "role": "workflow:owner",
+      "workflowId": "4qw7CTKMK0l1YyTA",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

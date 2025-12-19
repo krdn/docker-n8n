@@ -1,0 +1,61 @@
+{
+  "updatedAt": "2025-12-03T11:14:57.961Z",
+  "createdAt": "2025-11-30T11:17:31.471Z",
+  "id": "crzINHXpUFwRCr66",
+  "name": "CCTV 자동화 시스템",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## CCTV 자동화 시스템\n**Double click** to edit me. [Guide](https://www.youtube.com/watch?v=cEfHmSizZPc)\n\nCCTV 분석해서 상황을 전달함."
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -144
+      ],
+      "id": "3a39a4fb-cf7e-4cf0-b602-ba02bdc36a08",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "d8b77bca-920b-45ac-b147-9f2d79b783d3",
+  "activeVersionId": null,
+  "versionCounter": 5,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:12:09.044Z",
+      "createdAt": "2025-11-16T13:12:09.044Z",
+      "id": "aZu9uzC2NbhGEzcP",
+      "name": "study"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-30T11:17:31.471Z",
+      "createdAt": "2025-11-30T11:17:31.471Z",
+      "role": "workflow:owner",
+      "workflowId": "crzINHXpUFwRCr66",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

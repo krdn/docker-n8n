@@ -1,0 +1,62 @@
+{
+  "updatedAt": "2025-12-03T11:15:09.958Z",
+  "createdAt": "2025-11-30T10:56:18.702Z",
+  "id": "ZCB1YToyta9KUpqJ",
+  "name": "제미나이 API로 지식 챗봇 만들기",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n\n제미나이 API로 지식 챗봇 만들기\nhttps://www.youtube.com/watch?v=ZBPMbCxPgUE\n",
+        "width": 576
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        -320
+      ],
+      "id": "c3e5eb2a-5042-4a52-acc6-8345aeff6305",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "0b265746-53b2-4231-a9c5-8f6a9a828d4d",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:12:09.044Z",
+      "createdAt": "2025-11-16T13:12:09.044Z",
+      "id": "aZu9uzC2NbhGEzcP",
+      "name": "study"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-30T10:56:18.702Z",
+      "createdAt": "2025-11-30T10:56:18.702Z",
+      "role": "workflow:owner",
+      "workflowId": "ZCB1YToyta9KUpqJ",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

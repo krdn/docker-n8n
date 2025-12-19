@@ -1,0 +1,95 @@
+{
+  "updatedAt": "2025-11-21T05:55:16.256Z",
+  "createdAt": "2025-11-21T05:55:16.256Z",
+  "id": "96TrcVGo5hP0Jh7a",
+  "name": "Workflow 1",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "0f5532f9-36ba-4bef-86c7-30d607400b15",
+      "name": "Jira",
+      "webhookId": "string",
+      "disabled": true,
+      "notesInFlow": true,
+      "notes": "string",
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "executeOnce": false,
+      "alwaysOutputData": false,
+      "retryOnFail": false,
+      "maxTries": 0,
+      "waitBetweenTries": 0,
+      "onError": "stopWorkflow",
+      "position": [
+        -100,
+        80
+      ],
+      "parameters": {
+        "additionalProperties": {}
+      },
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "35",
+          "name": "jiraApi"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Jira": {
+      "main": [
+        [
+          {
+            "node": "Jira",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "errorWorkflow": "VzqKEW0ShTXA5vPj",
+    "timezone": "America/New_York",
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "callerIds": "14, 18, 23",
+    "timeSavedPerExecution": 0,
+    "availableInMCP": false
+  },
+  "staticData": {
+    "lastId": 1
+  },
+  "meta": null,
+  "pinData": null,
+  "versionId": "60be7d4d-9075-45e8-b07f-533ec3a8c273",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T05:55:16.256Z",
+      "createdAt": "2025-11-21T05:55:16.256Z",
+      "role": "workflow:owner",
+      "workflowId": "96TrcVGo5hP0Jh7a",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

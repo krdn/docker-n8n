@@ -1,0 +1,40 @@
+{
+  "updatedAt": "2025-11-16T13:14:36.307Z",
+  "createdAt": "2025-11-06T14:57:50.579Z",
+  "id": "WddHbMykJrkC8tZb",
+  "name": "My workflow 3",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "0d18bb82-0160-44bd-bb9b-41e8c1102644",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-06T14:57:50.579Z",
+      "createdAt": "2025-11-06T14:57:50.579Z",
+      "role": "workflow:owner",
+      "workflowId": "WddHbMykJrkC8tZb",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

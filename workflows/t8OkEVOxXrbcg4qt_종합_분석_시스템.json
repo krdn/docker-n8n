@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2025-11-22T09:49:37.181Z",
+  "createdAt": "2025-11-22T09:17:54.212Z",
+  "id": "t8OkEVOxXrbcg4qt",
+  "name": "종합 분석 시스템",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n\n- 운영에 필요한 자료 등을 제공함\n\n- 종합 분석시스템을 통해 선생들의 업무 피로도를 측정함\n- 요주의 학생 등을 분석함.\n- 여러가지 예측 시스템을 가동함.(학생)\n\n\n\n",
+        "height": 240,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -432
+      ],
+      "id": "35c31850-8656-4158-97a0-94fa015d210d",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "514b4fb7-19de-46fb-bf2b-ed3382112b12",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:17:54.212Z",
+      "createdAt": "2025-11-22T09:17:54.212Z",
+      "role": "workflow:owner",
+      "workflowId": "t8OkEVOxXrbcg4qt",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

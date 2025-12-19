@@ -1,0 +1,734 @@
+{
+  "updatedAt": "2025-12-05T06:35:56.245Z",
+  "createdAt": "2025-12-05T06:35:56.245Z",
+  "id": "lytYNSaXCgNsSZBx",
+  "name": "Deep Research AI Workflow",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "322b08a6-c192-4c7e-bdd3-f8c167d034a6",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        1008,
+        160
+      ],
+      "webhookId": "a5ea9aa7-a977-4976-aeb2-e781fc863097",
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "resource": "search"
+      },
+      "id": "236024dc-5648-4626-b49f-5b23cb15a217",
+      "name": "Search Google",
+      "type": "n8n-nodes-preview-oxylabs-ai-studio.oxylabsAiStudio",
+      "position": [
+        2016,
+        160
+      ],
+      "retryOnFail": true,
+      "typeVersion": 1,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output[0].content[0].text.urls",
+        "options": {
+          "destinationFieldName": "url"
+        }
+      },
+      "id": "0cb5cfcb-c88a-45d9-b638-fad3169dde55",
+      "name": "Split URLs",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        2576,
+        160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output[0].content[0].text.queries",
+        "options": {
+          "destinationFieldName": "query"
+        }
+      },
+      "id": "720a5f36-488d-44c1-bbb3-3d303f3b1ede",
+      "name": "Split queries",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        1552,
+        160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d55ad15b-5d31-4103-b2b5-c9d0158c7558",
+              "name": "length",
+              "type": "string",
+              "value": "={{ $('Split URLs').all().length }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2baf998c-99fd-4d5b-863c-4b2f731cbb95",
+      "name": "Get number of URLs",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1936,
+        736
+      ],
+      "executeOnce": true,
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "ZNXGefBcwkYYdyDE",
+          "cachedResultUrl": "/projects/jsKya8bKmDGhXtT2/datatables/ZNXGefBcwkYYdyDE",
+          "cachedResultName": "Content summaries"
+        },
+        "returnAll": true
+      },
+      "id": "8c714869-a3ae-4c10-9b7a-fa2ba0ac02db",
+      "name": "Get all data",
+      "type": "n8n-nodes-base.dataTable",
+      "position": [
+        3072,
+        416
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "ZNXGefBcwkYYdyDE",
+          "cachedResultUrl": "/projects/jsKya8bKmDGhXtT2/datatables/ZNXGefBcwkYYdyDE",
+          "cachedResultName": "Content summaries"
+        },
+        "returnAll": true
+      },
+      "id": "7a9f99e4-6d59-4428-86b7-a67333adb435",
+      "name": "Get current data for polling",
+      "type": "n8n-nodes-base.dataTable",
+      "maxTries": 5,
+      "position": [
+        2160,
+        736
+      ],
+      "executeOnce": false,
+      "notesInFlow": false,
+      "retryOnFail": false,
+      "typeVersion": 1,
+      "alwaysOutputData": false,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "9b2069cc-152e-490e-8c87-3687f24d350c",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.id.last() }}",
+              "rightValue": "={{ $('Get number of URLs').item.json.length }}"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "2d37708f-de6f-477d-a42d-ab7c20d63f0a",
+      "name": "If all data exists",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        2544,
+        640
+      ],
+      "executeOnce": false,
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e25f089e-2c8d-40e6-acf0-4defcf79cb23",
+      "name": "Extract IDs",
+      "type": "n8n-nodes-base.aggregate",
+      "position": [
+        2320,
+        736
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "id": "d03f82d0-a8b9-4771-af08-ad6afeb00727",
+      "name": "Wait 60s",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        1696,
+        848
+      ],
+      "webhookId": "18e044ce-5518-45e1-9828-8405432614e0",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "id": "53a92c43-6122-42db-abc6-d937794627a6",
+      "name": "Wait 10s",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2528,
+        896
+      ],
+      "webhookId": "a109b907-16d0-4d05-be48-cc751368e4ca",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "# 🔎  STEP 1: Create Google search queries\nSubmit your message/questions, automatically create strategic Google Search queries, and make them ready for processing.",
+        "height": 448,
+        "width": 960,
+        "color": 7
+      },
+      "id": "3f259961-c94c-442c-8204-1180d66c5452",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        864,
+        -16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 📌  STEP 2: Scrape Google & pick relevant URLs\nScrape Google Search results for each query, select relevant and authoritative sources from all results, and prepare the list of URLs for further processing.",
+        "height": 448,
+        "width": 960,
+        "color": 7
+      },
+      "id": "7e34d957-9914-4097-90e6-7a4f43ff5201",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1888,
+        -16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 📑  STEP 3: Scrape & summarize content in parallel\n\nScrape content from each URL, summarize it with AI, and save it into a data table. Make sure to convert the 3 nodes below to a sub-workflow and edit its setting to enable parallel execution. **See the setup instructions**.",
+        "height": 704,
+        "width": 960,
+        "color": 7
+      },
+      "id": "c77ce503-5534-46f7-92d4-3e0e1d08d853",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        864,
+        496
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# ⏳  STEP 4: Wait for data\nCheck the data table whether the last row's ID matches the amount of URLs we've sent to the sub-workflow. If it doesn't, wait for 10 seconds and repeat.",
+        "height": 704,
+        "width": 960,
+        "color": 7
+      },
+      "id": "7de71b2a-e89e-4bdd-87a5-123f0d82adf3",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1888,
+        496
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# ✅ STEP 5: Create final analysis\nGet all summaries from the data table and analyze everything with AI to produce a comprehensive deep research report.",
+        "height": 400,
+        "width": 768,
+        "color": 7
+      },
+      "id": "3ce97cb6-e7ef-438f-9da9-cd09f4ab6a7b",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2912,
+        272
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# ⚡︎  Fast Deep Research AI Flow\n\nFully automate **deep research from start to finish**: scrape Google Search results, select relevant sources, scrape & analyze each source in parallel, and generate a comprehensive research report.\n\nCheck out the [comprehensive step-by-step tutorial](https://blog.n8n.io/build-a-fast-deep-research-automation-flow-with-oxylabs-and-n8n/) on the n8n blog.\n\n\n## ❓ How it works\n1. **Submit your research questions** through n8n’s chat interface\n2. **AI generates strategic search queries** to explore different angles of your topic\n3. **Oxylabs scrapes Google Search** results for each query\n4. **AI evaluates and selects sources** that are the most relevant and authoritative\n5. **Content extraction runs in parallel** via a sub-workflow as Oxylabs scrapes each source and AI extracts key insights\n6. **Summaries are collected in n8n’s data table** for final processing\n7. **AI synthesizes everything** into a comprehensive research report with actionable insights\n\n\n\n\n##  ⚠️  Requirements\n1. 🆓 Create a **[free Oxylabs AI Studio key](https://aistudio.oxylabs.io/)** – 1000 credits\n2. 🧠 Create **OpenAI API key** – or use Gemini, Claude, or local Ollama models\n\n\n\n## ⚙️ Setup\n1. **Install Oxylabs AI Studio** as [shown on this page](https://n8n.io/integrations/oxylabs-ai-studio/)\n2. **Set your API keys**:\n    1.1 Oxylabs AI Studio\n    1.2 OpenAI\n3. **Create a [data table](https://docs.n8n.io/data/data-tables/) inside n8n**\n4. **Select the table name** in each data table node\n5. **Create a sub-workflow**:\n    4.1 Select the 3 nodes (Scrape content, Summarize content, Insert row)\n    4.2 Right-click\n    4.3 Select “Convert 3 nodes to sub-workflow”\n6. **Edit the sub-workflow settings** for for parallel execution:\n    5.1 Mode: Run once for each item\n    5.2 Options → Add Option → disable “Wait For Sub-Workflow Completion”\n",
+        "height": 1216,
+        "width": 576
+      },
+      "id": "c1615e97-4c95-46d4-8fd6-6dc7d817c495",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        224,
+        -16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{ $json.chatInput }}"
+            },
+            {
+              "role": "system",
+              "content": "You are a part of a deep research team. Your task is to analyze the user's message and create highly specific Google Search queries that will uncover precise and actionable information.\n\nGuidelines for creating search queries:\n- Include ALL key requirements and constraints from the user's message in your queries\n- Every query MUST include the core topic/goal from the user's message\n- Each query must explore a DIFFERENT angle or aspect of the topic\n- Prioritize specificity over breadth - avoid generic terms\n- Use exact terminology and technical terms when relevant\n- Each query should be 4-8 words to balance specificity with searchability\n\nProvide 3 search queries in a list that together cover the full scope of what needs to be researched."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object",
+              "verbosity": "low"
+            }
+          }
+        }
+      },
+      "id": "271fd362-6ef1-40e1-b302-06b999918768",
+      "name": "Create search queries",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        1216,
+        160
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{ JSON.stringify($input.all().flatMap(item => item.json.data || [])) }}"
+            },
+            {
+              "role": "system",
+              "content": "=You are a part of a deep research team.\nAnalyze the provided Google SERP results and select up to 10 of the most relevant and trustworthy distinct sources for answering this question:\n\"{{ $('When chat message received').item.json.chatInput }}\"\n\nImportant: The Google SERP results are combined from different searches into a single list. Each search term was distinct:\n{{ $('Create search queries').item.json.output[0].content[0].text.queries }}\n\nEvaluation criteria:\n- Prioritize authoritative sources (official sites, established publications, expert domains)\n- Use the SERP descriptions to assess topical relevance to the user's question\n- Prefer recent, primary sources over aggregators when applicable\n\nReturn only the selected URLs compiled into a single JSON array: {\"urls\": [\"url1\", \"url2\", \"url3\"]}\n\nIf fewer than 10 sources meet the criteria, return only the quality ones."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object",
+              "verbosity": "low"
+            }
+          }
+        }
+      },
+      "id": "5e4c38cf-e676-4653-984b-c71884127b1b",
+      "name": "Pick URLs",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        2240,
+        160
+      ],
+      "executeOnce": true,
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "resource": "scraper"
+      },
+      "id": "5dc581f8-fefb-4427-a316-f55c6f873bab",
+      "name": "Scrape content",
+      "type": "n8n-nodes-preview-oxylabs-ai-studio.oxylabsAiStudio",
+      "position": [
+        960,
+        672
+      ],
+      "executeOnce": false,
+      "retryOnFail": true,
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "ZNXGefBcwkYYdyDE",
+          "cachedResultUrl": "/projects/jsKya8bKmDGhXtT2/datatables/ZNXGefBcwkYYdyDE",
+          "cachedResultName": "Content summaries"
+        },
+        "columns": {
+          "value": {
+            "summary": "={{ $json.output[0].content[0].text }}"
+          },
+          "schema": [
+            {
+              "id": "summary",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "readOnly": false,
+              "required": false,
+              "displayName": "summary",
+              "defaultMatch": false
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "summary"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "21537360-42f6-49cd-8f65-4d19d82ef8f0",
+      "name": "Insert row",
+      "type": "n8n-nodes-base.dataTable",
+      "position": [
+        1520,
+        672
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5",
+          "cachedResultName": "GPT-5"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{ $json.data }}"
+            },
+            {
+              "role": "system",
+              "content": "=You are a member of a deep research team and you specificaly focus on extracting relevant information from provided web sources. Analyze the provided Markdown content and extract information relevant to the user's question.\n\nStructure your response in Markdown with these sections:\n\n# Key Findings\nList the main facts, statistics, or claims relevant to the question. Provide as much details as necessary.\n\n# Step-by-Step Instructions (skip if none)\nIf the content includes procedural steps or how-to information, extract them here. Provide as much in detail as necessary.\n\n# Supporting Details\nAdditional context, explanations, or evidence that supports the findings\n\nCRITICAL RULES:\n- Only extract information present in the source - never infer or add external knowledge\n- If the source doesn't address part of the question, state \"Not covered in this source\"\n- Keep extractions concise but preserve key specifics (numbers, dates, technical terms)\n- Use bullet points for clarity\n- Provide a 700-1000 words summary\n\nUser's Question:\n{{ $('Start').item.json.chatInput }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "fba6fc68-5f34-4145-a610-38ae2312b32a",
+      "name": "Summarize content",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        1168,
+        672
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5",
+          "cachedResultName": "GPT-5"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{ JSON.stringify($input.all().flatMap(item => item.json.summary || [])) }}"
+            },
+            {
+              "role": "system",
+              "content": "=You are a senior research analyst in a deep research team. Your role is to synthesize multiple content summaries into a comprehensive and actionable final report.\n\n## YOUR TASK\nAnswer this user question using ONLY the provided summaries:\n{{ $('When chat message received').item.json.chatInput }}\n\n## CRITICAL RULES\n- **Use ONLY the provided summaries** - Do not add information from your training data or make assumptions beyond what's explicitly stated in the summaries\n- Maximum 1500 words\n\n## REPORT STRUCTURE\n1. **Executive Summary** - Direct answer and key takeaway (2-3 sentences)\n2. **Main Analysis** - Synthesize findings, identify patterns, consensus views\n3. **Actionable Recommendations** - Specific steps the user can take, prioritized suggestions based on data, clear next actions\n4. **Gaps & Limitations** - Missing information and areas needing more research (short section, max 100 words)\n\n## STYLE GUIDELINES\n- Be concise and direct - avoid fluff or repetition\n- Always use clear HEADINGS and FORMATTING for scanability\n- When sources disagree, present both perspectives fairly\n\n## FORMATTING REQUIREMENTS\nUse RICH Markdown formatting for readability:\n- H1, H2, H3, H4 headings to structure content\n- Bold text for emphasis on key findings\n- Tables for comparisons or structured data\n- Bullet lists and numbered lists when appropriate\n- inline code and code blocks where relevant\n- Keep paragraphs concise"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "f723badd-f74e-4f03-85a1-80f88ddc6be6",
+      "name": "Final analysis",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        3312,
+        416
+      ],
+      "executeOnce": true,
+      "typeVersion": 2
+    }
+  ],
+  "connections": {
+    "Wait 10s": {
+      "main": [
+        [
+          {
+            "node": "Get current data for polling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 60s": {
+      "main": [
+        [
+          {
+            "node": "Get number of URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick URLs": {
+      "main": [
+        [
+          {
+            "node": "Split URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "Wait 60s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split URLs": {
+      "main": [
+        [
+          {
+            "node": "Scrape content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract IDs": {
+      "main": [
+        [
+          {
+            "node": "If all data exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all data": {
+      "main": [
+        [
+          {
+            "node": "Final analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Google": {
+      "main": [
+        [
+          {
+            "node": "Pick URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split queries": {
+      "main": [
+        [
+          {
+            "node": "Search Google",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape content": {
+      "main": [
+        [
+          {
+            "node": "Summarize content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize content": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get number of URLs": {
+      "main": [
+        [
+          {
+            "node": "Get current data for polling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If all data exists": {
+      "main": [
+        [
+          {
+            "node": "Get all data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 10s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create search queries": {
+      "main": [
+        [
+          {
+            "node": "Split queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Create search queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get current data for polling": {
+      "main": [
+        [
+          {
+            "node": "Extract IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "69e77ba3-a777-4bb6-82ec-3430e8d8d97a",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-12-05T06:35:56.245Z",
+      "createdAt": "2025-12-05T06:35:56.245Z",
+      "role": "workflow:owner",
+      "workflowId": "lytYNSaXCgNsSZBx",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

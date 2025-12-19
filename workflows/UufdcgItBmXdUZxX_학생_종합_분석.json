@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2025-11-22T09:50:52.293Z",
+  "createdAt": "2025-11-22T09:02:29.279Z",
+  "id": "UufdcgItBmXdUZxX",
+  "name": "학생  종합 분석",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n- 생년월일시: 사주 분석, 학습능률 좋은 날짜\n- 혈액형: \n- 이름: 셩명학\n- 사진: 관상, 손금\n- 키, 체중 : 자신감 등에 활용\n- 영양 상태: \n- MBTI : \n- 학교: 학교의 위치, 학습 분위기\n- 성적 : 성적 분석 시스템\n- 목표, 희망: 가능성 분석\n- 현재 지원가능한 학교: 준비해야할 것들\n- 상담 내용 :  학생, 학부모\n    ClovaNotes 텍스트 변환하여  분석함.\n- 성실함 판단 : \n- 부모의 재력: 상, 중, 하\n\n- 메니저 연결: 학생과 메니저의 궁합등을 활용하여 배정함.\n",
+        "height": 560,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2096,
+        -1248
+      ],
+      "id": "ee17d488-f9d1-45a2-a493-cce74e812d22",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "c74c982f-7f76-4d3e-8b44-4b30677d5eee",
+  "activeVersionId": null,
+  "versionCounter": 8,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:02:29.279Z",
+      "createdAt": "2025-11-22T09:02:29.279Z",
+      "role": "workflow:owner",
+      "workflowId": "UufdcgItBmXdUZxX",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

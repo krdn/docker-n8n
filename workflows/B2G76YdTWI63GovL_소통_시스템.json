@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2025-11-22T09:49:14.397Z",
+  "createdAt": "2025-11-22T09:21:15.963Z",
+  "id": "B2G76YdTWI63GovL",
+  "name": "소통 시스템",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n- 선생: 전달하고 싶은 내용 정리: 이해력, 설득력 등을 동원하여 문장을 만들어줌\n- 학생:  전달하고 싶은 데 표현하지 못하는것은  생성함.\n- 카톡으로 말을 전달할 때 중간에서 조윯함\n\n- 부모에게 전달하고 싶은 말을 분석하여 생성하여 전달함.\n- 학생에게 전달하는 문장도 생성함.\n\n- 선생들 상호간의 소통도 담당함\n- 의사를 전달할 때 정확한 내용이 되도록 제안함\n\n\n",
+        "height": 400,
+        "width": 512
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        -560
+      ],
+      "id": "b8b73e91-b514-41f1-bf84-630d761dd3c6",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "3058f57a-d26d-4098-b298-4fdf8078e4aa",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:21:15.963Z",
+      "createdAt": "2025-11-22T09:21:15.963Z",
+      "role": "workflow:owner",
+      "workflowId": "B2G76YdTWI63GovL",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

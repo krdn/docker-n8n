@@ -1,0 +1,481 @@
+{
+  "updatedAt": "2025-12-08T08:32:10.478Z",
+  "createdAt": "2025-11-08T04:17:36.971Z",
+  "id": "5XBk47zyjYph89PT",
+  "name": "지식 습득 프로세스",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "지식 학습프로세스",
+        "formDescription": "학습하고자 하는 내용을 입력하면 상세하게 학습 방법등을 자세하게 알려줌",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "내가 배우고 싶은 것",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "학습 설계 요청(목록 -)",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "LLM 모델선택",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Gemini"
+                  },
+                  {
+                    "option": "ChatGPI"
+                  },
+                  {
+                    "option": "Claude"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "학습 시간:",
+              "fieldType": "number",
+              "placeholder": "8",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "받을 Email:",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -336,
+        -32
+      ],
+      "id": "51bcd262-daca-48a5-9152-9aa5b8631805",
+      "name": "On form submission",
+      "webhookId": "b8a75e76-ab9d-49b5-a379-198bd11c0407"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json['LLM 모델선택'] }}",
+                    "rightValue": "Gemini",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "60c808d5-b0ef-4b30-b338-5d6544f5e34d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "474b1522-83c9-4e7b-bb2b-822be276c6e3",
+                    "leftValue": "={{ $json['LLM 모델선택'] }}",
+                    "rightValue": "ChatGPT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b245b50c-8167-4fef-8bce-80d7e609b501",
+                    "leftValue": "={{ $json['LLM 모델선택'] }}",
+                    "rightValue": "Claude",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        224,
+        -48
+      ],
+      "id": "ec1e904f-6d63-4415-aca6-1591eb306bb4",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=당신은 \"AI 시대의 학습 설계 전문가\" 입니다.  \n내가 배우고 싶은 기술/지식에 대해 아래 구조에 따라  \n가장 효율적인 학습 경로와 실전 적용 방안을 설계해주세요.\n",
+              "role": "model"
+            },
+            {
+              "content": "=[{{ $json['내가 배우고 싶은 것'] }}]\n{{ $json['학습 설계 요청(목록 -)'] }}\n\n[학습 설계 요청]\n1) 이 기술이 AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\n2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n3) 반드시 알아야 하는 연관 개념 (순서대로)\n4) 학습 로드맵 (시간 1 → 시간 {{ $('On form submission').item.json['학습 시간:'] }} ) : 매 시간별 해야 할 구체적 행동 위주\n5) 실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)\n6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n7) 학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)\n8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n9) {{ $json['학습 시간:'] }} 동안 학습이 끝낼수 있도록 분석 해줘."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -288
+      ],
+      "id": "c1cf84ab-41f7-4695-bf75-40e27f6e8bcf",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "g63PhpP72tYoltLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json['받을 Email:'] }}",
+        "subject": "={{ $('Switch').item.json['내가 배우고 싶은 것'] }}",
+        "message": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        992,
+        -96
+      ],
+      "id": "93c8eeed-b359-4d33-907a-3320ceb4a3f5",
+      "name": "Send a message",
+      "webhookId": "327ff217-a182-4199-b52c-1cbcf8ca3df9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yAjD6OMhQWxiwoML",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.content.parts[0].text }}",
+        "options": {
+          "backslashEscapesHTMLTags": true,
+          "emoji": true,
+          "simpleLineBreaks": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "45ba030a-616a-44ac-afc4-32093a7c4166",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        848,
+        -272
+      ],
+      "id": "e3d3c3f0-1bca-4d1b-aefc-3e22345444ca",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "56QgHCNYMtze1E1Z",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['내가 배우고 싶은 것'] }}\n{{ $json['학습 설계 요청(목록 -)'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=당신은 \"AI 시대의 학습 설계 전문가\" 입니다.  \n내가 배우고 싶은 기술/지식에 대해 아래 구조에 따라  \n가장 효율적인 학습 경로와 실전 적용 방안을 설계해주세요.\n"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "=[{{ $json['내가 배우고 싶은 것'] }}]\n{{ $json['학습 설계 요청(목록 -)'] }}\n\n[학습 설계 요청]\n1) 이 기술이 AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\n2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n3) 반드시 알아야 하는 연관 개념 (순서대로)\n4) 학습 로드맵 (시간 1 → 시간 {{ $('On form submission').item.json['학습 시간:'] }} ) : 매 시간별 해야 할 구체적 행동 위주\n5) 실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)\n6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n7) 학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)\n8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n9) {{ $json['학습 시간:'] }} 동안 학습이 끝낼수 있도록 분석 해줘."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        496,
+        80
+      ],
+      "id": "e57b4fde-d3d0-42b2-92e0-68100b743868",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        672,
+        256
+      ],
+      "id": "6ad471cb-22bd-48d1-ac6c-77abd92ebea4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "g63PhpP72tYoltLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "value": "={{ $json['내가 배우고 싶은 것'] }}{{ $json['학습 설계 요청(목록 -)'] }}",
+        "dataPropertyName": "hash"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -32
+      ],
+      "id": "825484ae-b338-4843-abf4-d3f0a580b601",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "collection": "={{ $json.hash }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        1024,
+        -288
+      ],
+      "id": "a3ffefb0-6334-487e-8b7d-d75c64b01a78",
+      "name": "Find documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "3pbvamTyYG5WAzde",
+          "name": "MongoDB krdn_n8n"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Basic LLM Chain": [
+      {
+        "json": {
+          "text": "안녕하세요, AI 시대의 학습 설계 전문가입니다. n8n 웹훅은 AI 시대에 매우 강력한 도구이며, 효율적인 학습 설계를 통해 빠르게 핵심 역량을 확보하실 수 있도록 돕겠습니다.\n\n---\n\n### [n8n 웹훅 상세 설명]\n\nn8n (node-based workflow automation)은 코드를 거의 또는 전혀 사용하지 않고 다양한 온라인 서비스와 API를 연결하여 복잡한 자동화 워크플로우를 생성할 수 있게 해주는 도구입니다. 여기서 **웹훅(Webhook)**은 n8n이 외부 시스템과 실시간으로 데이터를 주고받는 핵심적인 메커니즘입니다.\n\n간단히 말해 웹훅은 \"이벤트가 발생하면 나에게 알려줘!\"라고 미리 약속하는 방식입니다.\n\n1.  **n8n이 웹훅을 수신하는 경우 (가장 일반적):**\n    *   **트리거 역할:** n8n 워크플로우는 특정 URL(웹훅 URL)에서 들어오는 데이터를 \"감시\"합니다. 외부 시스템(예: 새로운 이메일 구독, 결제 완료, GitHub 푸시 이벤트 등)에서 어떤 이벤트가 발생하면, 해당 시스템은 미리 설정된 n8n의 웹훅 URL로 관련 데이터를 전송합니다. 이 데이터를 수신하는 순간 n8n 워크플로우가 시작됩니다.\n    *   **데이터 형식:** 주로 JSON(JavaScript Object Notation) 형태로 데이터를 받으며, 이 데이터는 워크플로우 내 다른 노드에서 처리, 분석, 변환, 저장 등의 작업에 사용됩니다.\n    *   **HTTP 메서드:** 주로 `POST` 메서드를 사용하여 데이터를 전송받습니다. 때로는 `GET` 메서드로 간단한 조회 요청을 받을 수도 있습니다.\n\n2.  **n8n이 웹훅을 전송하는 경우:**\n    *   n8n 워크플로우 내부에서 특정 조건이 충족되거나 작업이 완료되었을 때, 다른 외부 시스템으로 데이터를 전송하여 해당 시스템의 특정 기능을 트리거하거나 업데이트할 수 있습니다. 예를 들어, \"데이터 처리 완료 후 슬랙 채널로 알림 웹훅 전송\"과 같은 시나리오에 사용됩니다. 이 경우에는 HTTP Request 노드를 사용하여 구현합니다.\n\n**핵심 요약:** n8n 웹훅은 마치 문지기와 같아서, 외부에서 문을 두드리면 워크플로우를 시작하고, 때로는 워크플로우가 외부 문을 두드려 다른 작업을 시작하게 하는 **실시간 자동화의 양방향 통로**입니다. 이를 통해 코드 없이도 수많은 서비스와 데이터를 연동하고 자동화할 수 있습니다.\n\n---\n\n### [학습 설계 요청]\n\n#### 1) 이 기술이 AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\nn8n 웹훅은 AI 서비스가 생성한 데이터를 실시간으로 수신하거나 AI 모델의 결과에 따라 다른 시스템을 자동화하는, AI 시대의 빠르고 유연한 서비스 연동과 자동화의 핵심 도구입니다.\n\n#### 2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n1.  **Webhook Trigger Node:** n8n에서 웹훅을 수신하고 워크플로우를 시작하는 가장 기본적인 노드.\n2.  **Webhook URL:** 외부 시스템이 데이터를 보낼 n8n의 고유한 주소.\n3.  **Payload (페이로드):** 웹훅을 통해 전송되는 실제 데이터 (주로 JSON 형식).\n4.  **HTTP Methods (POST/GET):** 웹훅 통신에 사용되는 데이터 전송 방식 (데이터 수신에는 주로 `POST` 사용).\n\n#### 3) 반드시 알아야 하는 연관 개념 (순서대로)\n1.  **데이터 처리 노드 (Set, Code):** 수신된 Payload 데이터를 추출, 변환, 가공하는 방법.\n2.  **조건 분기 (IF Node):** 수신된 데이터의 특정 값에 따라 워크플로우의 흐름을 다르게 처리하는 로직.\n3.  **API 요청 (HTTP Request Node):** n8n 워크플로우 내에서 다른 서비스로 HTTP 요청(GET, POST 등)을 보내는 방법 (웹훅을 보내는 경우 포함).\n4.  **에러 핸들링 (Error Workflow):** 웹훅 수신 또는 처리 중 발생할 수 있는 오류를 감지하고 적절히 대응하는 방법.\n5.  **보안 및 인증 (API Key, Basic Auth):** 웹훅을 안전하게 사용하고 민감한 정보를 보호하는 방법 (특히 외부 API와 연동 시).\n\n#### 4) 학습 로드맵 (시간 1 → 시간 8)\n*   **시간 1: n8n & Webhook 개요 이해 (이론)**\n    *   n8n이란 무엇인가? 웹훅이란 무엇인가? 웹훅의 동작 원리 파악.\n    *   n8n 클라우드 가입 또는 로컬 설치 (도커 권장) 및 UI 둘러보기.\n    *   *결과물:* n8n 환경 설정 완료 및 웹훅 기본 개념 노트.\n*   **시간 2: 첫 웹훅 수신 워크플로우 구현**\n    *   `Webhook Trigger` 노드 추가하고 `GET` 방식으로 테스트 실행.\n    *   `Webhook URL` 복사 후 웹 브라우저에서 직접 접속하여 트리거 테스트.\n    *   `Set` 노드를 추가하여 수신된 데이터 확인 및 간단한 값 추출 시도.\n    *   *결과물:* 브라우저 요청으로 트리거되는 첫 n8n 워크플로우.\n*   **시간 3: POST 웹훅과 Payload 분석**\n    *   `Webhook Trigger` 노드를 `POST` 방식으로 변경.\n    *   Postman, Insomnia 또는 `curl` 명령어를 사용하여 JSON `Payload`와 함께 `POST` 요청 보내기.\n    *   n8n의 `JSON` 노드를 사용하여 수신된 `Payload` 구조 시각적으로 확인.\n    *   *결과물:* 외부 도구로 JSON Payload를 성공적으로 수신 및 분석하는 워크플로우.\n*   **시간 4: 데이터 추출 및 가공**\n    *   수신된 `Payload`에서 특정 필드 값(예: `name`, `email`)을 `Set` 노드를 이용해 추출하고 새 변수로 저장.\n    *   `Code` 노드를 사용하여 간단한 JavaScript로 데이터 포맷 변경 또는 계산 수행 (예: 이름 대문자화).\n    *   *결과물:* 웹훅 데이터를 목적에 맞게 가공하는 워크플로우.\n*   **시간 5: 외부 서비스 연동 (Webhook → API Request)**\n    *   웹훅으로 수신된 데이터를 바탕으로 `HTTP Request` 노드를 사용하여 간단한 외부 API(예: Slack 메시지 전송 API, OpenWeatherMap API) 호출.\n    *   API 키 등 인증 정보를 `Environment Variable`로 안전하게 관리하는 방법 익히기.\n    *   *결과물:* 웹훅 데이터로 외부 API를 호출하여 메시지를 보내거나 정보를 조회하는 워크플로우.\n*   **시간 6: 조건 분기 및 에러 핸들링**\n    *   `IF` 노드를 사용하여 웹훅 데이터의 특정 조건(예: `status`가 'completed'인 경우)에 따라 다른 작업 수행.\n    *   `Error Trigger` 및 `Error Workflow`를 설정하여 워크플로우 실행 중 오류 발생 시 알림 전송 (예: Slack, Email).\n    *   *결과물:* 조건에 따라 분기되고 오류 발생 시 알림을 주는 견고한 워크플로우.\n*   **시간 7: n8n에서 웹훅 전송 및 고급 설정**\n    *   `HTTP Request` 노드를 사용하여 n8n 워크플로우 내에서 외부 서비스로 웹훅(`POST`)을 직접 보내는 방법 구현.\n    *   `Webhook Trigger`의 인증 설정 (예: 헤더 기반 인증)을 통한 보안 강화.\n    *   *결과물:* n8n이 다른 시스템을 트리거하는 워크플로우 및 보안이 강화된 웹훅 설정.\n*   **시간 8: 종합 실습 및 복습**\n    *   그동안 배운 내용을 바탕으로 간단한 웹훅 기반 자동화 프로젝트 하나를 처음부터 끝까지 구현.\n    *   주요 노드와 개념 복습, Q&A 및 트러블슈팅.\n    *   *결과물:* 웹훅을 활용한 완결된 미니 프로젝트 및 자신감 확보.\n\n#### 5) 실전 적용 프로젝트 3개 제안\n1.  **쉬움: \"나만의 Slack/Discord 알림 웹훅\"**\n    *   **목표:** 특정 웹 URL로 간단한 텍스트를 `GET` 요청 또는 `POST` 요청(JSON Payload)으로 보내면, n8n이 이를 수신하여 Slack 또는 Discord 채널로 메시지를 전송합니다.\n    *   **기술 요소:** Webhook Trigger (GET/POST), Set 노드 (데이터 추출), HTTP Request 노드 (Slack/Discord Webhook).\n2.  **보통: \"새로운 고객 등록 자동화\"**\n    *   **목표:** 가상의 \"고객 등록 시스템\"에서 새로운 고객 정보(이름, 이메일)가 웹훅으로 들어오면, n8n이 이 정보를 받아 Google Sheets에 추가하고, 고객에게 환영 이메일(SendGrid/Gmail 노드 사용)을 발송합니다.\n    *   **기술 요소:** Webhook Trigger (POST, JSON Payload), Set 노드, Google Sheets 노드, SendGrid/Gmail 노드, Error Handling.\n3.  **어려움: \"AI 기반 콘텐츠 요약 및 배포\"**\n    *   **목표:** 웹훅으로 긴 글의 URL을 수신합니다. n8n은 해당 URL에서 텍스트를 추출하고(HTTP Request), 이를 OpenAI나 다른 LLM API(HTTP Request)로 보내 요약본을 생성합니다. 생성된 요약본을 Notion 데이터베이스에 저장하고(Notion 노드), 동시에 Slack/Discord로 요약 완료 알림을 보냅니다.\n    *   **기술 요소:** Webhook Trigger (POST, URL Payload), HTTP Request 노드 (URL 콘텐츠 추출, LLM API 호출), Set 노드 (데이터 가공), Notion 노드, Slack/Discord 노드, Error Handling, API Key 관리.\n\n#### 6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n1.  **실수: 웹훅 URL을 활성화하지 않음.**\n    *   **피하는 방법:** n8n 워크플로우의 우측 상단 `Active` 토글이 **반드시 켜져 있는지 확인**하고, 웹훅 노드 자체의 `Status`가 `Listening for webhook calls...`인지 확인하세요. 변경 사항 저장 후 `Save` 버튼을 누르는 것도 중요합니다.\n2.  **실수: 잘못된 HTTP 메서드 사용.**\n    *   **피하는 방법:** 대부분의 데이터 전송 웹훅은 `POST` 메서드를 사용합니다. 외부 시스템이 어떤 메서드를 사용하는지 문서를 확인하고, n8n `Webhook Trigger` 노드에서 올바른 메서드를 선택하세요. `GET`은 주로 간단한 정보 요청이나 테스트에 사용됩니다.\n3.  **실수: Payload 구조 불일치.**\n    *   **피하는 방법:** 웹훅이 수신된 후 `Webhook Trigger` 노드의 `Outputs` 탭에서 실제 들어온 `JSON Payload` 구조를 꼼꼼히 확인하세요. `Set` 노드나 `Code` 노드에서 데이터를 참조할 때 이 구조와 정확히 일치시켜야 합니다. 초기 테스트 단계에서 `Test Webhook` 버튼을 자주 활용하여 실제 데이터를 확인하는 습관을 들이세요.\n4.  **실수: 에러 핸들링 미비.**\n    *   **피하는 방법:** 워크플로우가 복잡해질수록 오류는 필연적입니다. 초기부터 `Error Workflow`를 설정하여, 예상치 못한 상황(예: 외부 API 응답 지연, 데이터 누락) 발생 시 즉시 알림을 받도록 설계하세요. 작은 워크플로우에도 간단한 오류 처리 노드(예: Slack 알림)를 추가하는 습관을 들이세요.\n5.  **실수: 보안에 대한 무관심.**\n    *   **피하는 방법:** 웹훅 URL은 외부에 노출될 수 있습니다. 중요한 정보나 API 키는 절대로 웹훅 `Payload`에 직접 포함하지 말고, n8n의 `Environment Variable` 기능을 사용하여 관리하세요. 필요한 경우, `Webhook Trigger`에 헤더 기반 인증이나 IP 화이트리스트 기능을 추가하여 접근을 제한하는 것을 고려하세요.\n\n#### 7) 학습 효율을 극대화하기 위한 참고 리소스\n*   **공식 문서:**\n    *   **n8n Documentation (Webhook Trigger):** [https://docs.n8n.io/nodes/triggers/webhook/](https://docs.n8n.io/nodes/triggers/webhook/)\n    *   **n8n Documentation (HTTP Request Node):** [https://docs.n8n.io/nodes/n8n-nodes-base.httpRequest/](https://docs.n8n.io/nodes/n8n-nodes-base.httpRequest/)\n    *   각 노드별 사용법과 예제가 잘 정리되어 있습니다.\n*   **YouTube 채널:**\n    *   **n8n Official Channel:** 기본 튜토리얼, 업데이트 소식, 실제 사용 사례 영상.\n    *   **Automate All The Things (PAI):** n8n을 포함한 자동화 도구에 대한 깊이 있는 튜토리얼과 실전 프로젝트 영상.\n*   **커뮤니티:**\n    *   **n8n Community Forum:** 질문하고 답변을 얻을 수 있는 가장 좋은 곳. 다른 사용자들의 워크플로우 아이디어를 얻기 좋습니다. [https://community.n8n.io/](https://community.n8n.io/)\n*   **테스트 도구:**\n    *   **Postman / Insomnia:** HTTP 요청을 수동으로 테스트하고 웹훅 Payload를 만들어 보내는 데 필수적인 도구.\n    *   **RequestBin / Webhook.site:** 임시 웹훅 URL을 제공하여 외부 시스템이 웹훅을 제대로 보내는지 확인하는 데 유용합니다. (n8n의 Test Webhook 기능과 유사).\n    *   **ngrok:** 로컬에서 실행 중인 n8n 인스턴스에 퍼블릭 웹훅 URL을 부여하여 테스트할 때 유용합니다.\n\n#### 8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n매일 15분, n8n 웹훅으로 새로운 서비스를 연결하고 데이터를 처리하는 워크플로우를 직접 만들어보고 테스트한다.\n\n#### 9) 8시간 동안 학습이 끝낼 수 있도록 분석 해줘.n8n 웹훅\n네, 8시간이라는 시간은 **n8n 웹훅의 핵심 개념을 이해하고 기본적인 웹훅 기반 워크플로우를 직접 구현하여 실전 감각을 익히는 데 충분한 시간**입니다.\n\n**8시간 학습으로 달성할 수 있는 목표 수준:**\n*   웹훅의 개념과 n8n에서의 역할을 명확히 이해합니다.\n*   `Webhook Trigger` 노드를 사용하여 다양한 HTTP 메서드(GET, POST)로 데이터를 수신할 수 있습니다.\n*   수신된 `Payload` 데이터를 분석하고, `Set` 및 `Code` 노드를 통해 필요한 데이터를 추출, 가공할 수 있습니다.\n*   `HTTP Request` 노드를 사용하여 웹훅 데이터 기반으로 외부 API를 호출하거나, n8n에서 다른 시스템으로 웹훅을 전송할 수 있습니다.\n*   `IF` 노드를 활용하여 간단한 조건 분기 로직을 구현할 수 있습니다.\n*   간단한 에러 핸들링 방법을 이해하고 적용할 수 있습니다.\n*   제시된 '쉬움' 및 '보통' 난이도의 실전 프로젝트를 스스로 구현해 볼 수 있는 역량을 갖춥니다.\n\n**주의사항 및 성공 전략:**\n*   **집중도:** 8시간은 몰입하여 학습해야 하는 시간입니다. distractions를 최소화하고 집중하세요.\n*   **실습 중심:** 이론 학습 후 바로 실습에 적용하는 것이 중요합니다. 단순히 보는 것을 넘어 직접 만들고 테스트하며 시행착오를 겪어야 합니다.\n*   **쉬운 것부터 시작:** 처음부터 복잡한 워크플로우를 시도하기보다, 가장 기본적인 웹훅 수신-데이터 확인-간단한 출력(예: 콘솔 로그, Set 노드) 과정을 반복하여 익숙해지는 것이 좋습니다.\n*   **오류는 배움의 기회:** 오류가 발생하면 좌절하지 말고, n8n의 실행 로그와 에러 메시지를 꼼꼼히 읽고 스스로 해결하려 노력하는 과정에서 학습이 극대화됩니다.\n\n이 로드맵은 핵심을 빠르게 익히는 데 최적화되어 있으므로, 8시간 이후에는 더 복잡한 시나리오나 심화 학습으로 나아갈 수 있는 튼튼한 기반을 마련하게 될 것입니다."
+        }
+      }
+    ],
+    "On form submission": [
+      {
+        "json": {
+          "내가 배우고 싶은 것": "n8n",
+          "학습 설계 요청(목록 -)": "- 학습",
+          "LLM 모델선택": "Gemini",
+          "학습 시간:": 8,
+          "받을 Email:": "krdn.net@gmail.com",
+          "submittedAt": "2025-12-08T17:30:41.135+09:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "457bf1a9-4b75-4db6-a9aa-40f908ede4cd",
+  "activeVersionId": null,
+  "versionCounter": 58,
+  "triggerCount": 1,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:08:22.642Z",
+      "createdAt": "2025-11-16T13:08:22.642Z",
+      "id": "tyCL20qgI2s9SdQr",
+      "name": "krdn"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-08T04:17:36.971Z",
+      "createdAt": "2025-11-08T04:17:36.971Z",
+      "role": "workflow:owner",
+      "workflowId": "5XBk47zyjYph89PT",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

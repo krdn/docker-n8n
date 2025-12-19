@@ -1,0 +1,281 @@
+{
+  "updatedAt": "2025-11-22T04:53:19.530Z",
+  "createdAt": "2025-11-22T03:48:27.635Z",
+  "id": "e7YWYCPi8TpW32Si",
+  "name": "환율 Gemini",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "499dcd75-7aa3-4238-85c4-dcc34a846f3c",
+      "name": "매일 아침 7시 (장전 분석)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -672,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://v6.exchangerate-api.com/v6/2b50a258bff2b1069a26ca38/pair/USD/KRW",
+        "options": {}
+      },
+      "id": "bb3f8d1e-282f-4915-ae45-c00cd63eedd3",
+      "name": "[Price] 실시간 환율",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -384,
+        -48
+      ],
+      "notes": "ExchangeRate-API Key 필요"
+    },
+    {
+      "parameters": {
+        "url": "https://api.stlouisfed.org/fred/series/observations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "series_id",
+              "value": "DGS10"
+            },
+            {
+              "name": "api_key",
+              "value": "1163b1715fcc065cdc5867f30c329f02"
+            },
+            {
+              "name": "sort_order",
+              "value": "desc"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            },
+            {
+              "name": "file_type",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7353c9d1-8e56-4307-92b3-ba7fac75b273",
+      "name": "[Macro] 미국 10년물 금리",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -384,
+        112
+      ],
+      "notes": "FRED API Key 필요"
+    },
+    {
+      "parameters": {
+        "url": "https://api.stlouisfed.org/fred/series/observations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "series_id",
+              "value": "VIXCLS"
+            },
+            {
+              "name": "api_key",
+              "value": "YOUR_FRED_API_KEY"
+            },
+            {
+              "name": "sort_order",
+              "value": "desc"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            },
+            {
+              "name": "file_type",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ad1e3986-e42a-4ea1-bcd2-0a93a26d9857",
+      "name": "[Vol] VIX (공포지수)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -192,
+        112
+      ],
+      "notes": "변동성 모델용 데이터"
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/top-headlines",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "category",
+              "value": "business"
+            },
+            {
+              "name": "language",
+              "value": "en"
+            },
+            {
+              "name": "pageSize",
+              "value": "5"
+            },
+            {
+              "name": "apiKey",
+              "value": "YOUR_NEWS_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7bb8ea10-922f-4fc8-abc2-6f047e870f76",
+      "name": "[Sentiment] 주요 뉴스",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -384,
+        304
+      ],
+      "notes": "NewsAPI Key 필요"
+    },
+    {
+      "parameters": {
+        "jsCode": "// G-MDAL 7 Framework Logic Implementation\n\n// 1. 데이터 추출 (안전한 접근을 위해 Optional Chaining 사용)\nconst fxRate = items[0].json.conversion_rate || 1350; // Default fallback\nconst us10y = parseFloat($('[Macro] 미국 10년물 금리').first().json.observations?.[0]?.value) || 4.0;\nconst vix = parseFloat($('[Vol] VIX (공포지수)').first().json.observations?.[0]?.value) || 20.0;\nconst newsItems = $('[Sentiment] 주요 뉴스').first().json.articles || [];\n\n// 2. 스코어링 알고리즘 (Wall Street Logic)\nlet macroScore = 0; // 펀더멘털\nlet volScore = 0;   // 변동성\n\n// Macro Logic: 금리가 4.2% 이상이면 강달러 압력\nif (us10y > 4.2) macroScore += 1; \nelse if (us10y < 3.8) macroScore -= 1;\n\n// Volatility Logic: VIX > 25면 안전자산(달러) 선호\nif (vix > 25) volScore += 1;\nelse if (vix < 15) volScore -= 1; // Risk On (원화 강세)\n\n// 뉴스 텍스트 추출\nconst headlines = newsItems.map(n => `- ${n.title}`).join('\\n');\n\n// 3. G-MDAL Context 생성\nreturn {\n  json: {\n    analysis_timestamp: new Date().toISOString(),\n    market_data: {\n      fx_rate: fxRate,\n      us_treasury_10y: us10y,\n      vix_index: vix\n    },\n    scores: {\n      macro_score: macroScore,\n      volatility_score: volScore,\n      note: \"Positive Score = USD Strong, Negative = KRW Strong\"\n    },\n    news_context: headlines\n  }\n};"
+      },
+      "id": "78e4e9f0-f1e0-4022-9eeb-d593ac34abe9",
+      "name": "G-MDAL 7 Scoring Engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        48,
+        96
+      ],
+      "notes": "Javascript로 지표를 계산하고 데이터를 통합합니다."
+    },
+    {
+      "parameters": {},
+      "id": "ee04b81d-cb89-42e1-be0c-bafa69024144",
+      "name": "수동 테스트",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "매일 아침 7시 (장전 분석)": {
+      "main": [
+        [
+          {
+            "node": "[Price] 실시간 환율",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "[Price] 실시간 환율": {
+      "main": [
+        [
+          {
+            "node": "[Macro] 미국 10년물 금리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "[Macro] 미국 10년물 금리": {
+      "main": [
+        [
+          {
+            "node": "[Vol] VIX (공포지수)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "[Vol] VIX (공포지수)": {
+      "main": [
+        [
+          {
+            "node": "[Sentiment] 주요 뉴스",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "[Sentiment] 주요 뉴스": {
+      "main": [
+        [
+          {
+            "node": "G-MDAL 7 Scoring Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "수동 테스트": {
+      "main": [
+        [
+          {
+            "node": "[Price] 실시간 환율",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "589da173-9f3a-47ee-8a0d-4f858147bec7",
+  "activeVersionId": null,
+  "versionCounter": 7,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T03:48:27.635Z",
+      "createdAt": "2025-11-22T03:48:27.635Z",
+      "role": "workflow:owner",
+      "workflowId": "e7YWYCPi8TpW32Si",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

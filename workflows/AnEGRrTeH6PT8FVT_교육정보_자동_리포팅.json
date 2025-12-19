@@ -1,0 +1,63 @@
+{
+  "updatedAt": "2025-11-22T09:48:54.530Z",
+  "createdAt": "2025-11-22T09:30:27.345Z",
+  "id": "AnEGRrTeH6PT8FVT",
+  "name": "교육정보 자동 리포팅",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)\n- 교육관련 시스템에서 매일 정보를 수신하여 정리 보고함\n- 학생에게 맞는 새로운 학습 방법 등을 검색하여 제공함.\n- 뇌 과학, 영양학 등 학습에 필요한 정보 수집\n- 입시관련 최신 정보 등을 가져옴.\n\n",
+        "height": 336,
+        "width": 640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -608
+      ],
+      "id": "7a18672e-46e9-4dbc-a23a-41f354f474fb",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "405f9f46-16cf-462b-9a0e-2ab798c00183",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [
+    {
+      "updatedAt": "2025-11-22T09:48:43.526Z",
+      "createdAt": "2025-11-22T09:48:43.526Z",
+      "id": "M6U855dPrcu5UAXJ",
+      "name": "school"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T09:30:27.345Z",
+      "createdAt": "2025-11-22T09:30:27.345Z",
+      "role": "workflow:owner",
+      "workflowId": "AnEGRrTeH6PT8FVT",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

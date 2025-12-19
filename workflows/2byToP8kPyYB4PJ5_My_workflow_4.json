@@ -1,0 +1,95 @@
+{
+  "updatedAt": "2025-12-05T10:12:07.242Z",
+  "createdAt": "2025-11-20T01:19:34.443Z",
+  "id": "2byToP8kPyYB4PJ5",
+  "name": "My workflow 4",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a42e9908-defa-4c30-909e-43a0ffa37a14",
+      "name": "When chat message received",
+      "webhookId": "9f053b0d-e886-432b-ae21-2e6c4701e917"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        176,
+        0
+      ],
+      "id": "324d4d49-d072-4211-a88b-c1ba283ad8a9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "content": "### 10분 만에 만드는 AI 에이전트! 자동화 끝판왕 기초 강의\n**Double click** to edit me. [Guide](https://www.youtube.com/watch?v=h4xKl9GMfTI)"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -208
+      ],
+      "id": "ab716e79-75aa-4350-b5cb-15b9ca28379f",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "151df305-dd52-4bc1-b388-79300cb25bb2",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:19:34.443Z",
+      "createdAt": "2025-11-20T01:19:34.443Z",
+      "role": "workflow:owner",
+      "workflowId": "2byToP8kPyYB4PJ5",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

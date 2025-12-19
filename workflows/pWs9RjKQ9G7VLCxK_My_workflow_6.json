@@ -1,0 +1,591 @@
+{
+  "updatedAt": "2025-12-08T08:27:02.914Z",
+  "createdAt": "2025-12-07T12:27:18.501Z",
+  "id": "pWs9RjKQ9G7VLCxK",
+  "name": "My workflow 6",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.aimodel }}",
+                    "rightValue": "models/gemini",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "60c808d5-b0ef-4b30-b338-5d6544f5e34d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "474b1522-83c9-4e7b-bb2b-822be276c6e3",
+                    "leftValue": "={{ $json.body.aimodel }}",
+                    "rightValue": "chatgpt",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b245b50c-8167-4fef-8bce-80d7e609b501",
+                    "leftValue": "={{ $json.body.aimodel }}",
+                    "rightValue": "moonshotai/kimi-k2:free",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        512,
+        768
+      ],
+      "id": "0495c8d7-bcc1-46d5-9a0a-0d2e57a724c5",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "={{ $('Webhook').item.json.body.title }}",
+        "message": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1568,
+        992
+      ],
+      "id": "5b7585ed-b28a-4552-acec-3418451a5201",
+      "name": "Send a message",
+      "webhookId": "327ff217-a182-4199-b52c-1cbcf8ca3df9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yAjD6OMhQWxiwoML",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.content.parts[0].text }}",
+        "options": {
+          "backslashEscapesHTMLTags": true,
+          "completeHTMLDocument": true,
+          "emoji": true,
+          "simpleLineBreaks": true,
+          "tables": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        624
+      ],
+      "id": "684be2c9-1e88-4f5a-974a-8b6b5cb4ed28",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['내가 배우고 싶은 것'] }}\n{{ $json['학습 설계 요청(목록 -)'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=당신은 \"AI 시대의 학습 설계 전문가\" 입니다.  \n내가 배우고 싶은 기술/지식에 대해 아래 구조에 따라  \n가장 효율적인 학습 경로와 실전 적용 방안을 설계해주세요.\n"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "=[{{ $('Webhook').item.json.body.topic }}]\n{{ $('Webhook').item.json.body.goals }}\n\n[학습 설계 요청]\n1) 이 기술이 AI와 연관이 있다면, AI 시대에 왜 중요한지 \"한 문장\"으로 핵심 요약\n2) 이 기술을 구성하는 핵심 개념 20% (가장 먼저 익혀야 하는 핵심 3~5개)\n3) 반드시 알아야 하는 연관 개념 (순서대로)\n4) 학습 로드맵 (시간 1 → 시간 {{ $('Webhook').item.json.body.studyTime }}) : 매 시간별 해야 할 구체적 행동 위주\n5) 실전 적용 프로젝트 3개 제안 (난이도: 쉬움 → 보통 → 어려움)\n6) 내가 흔히 빠지는 실수와 그걸 피하는 방법\n7) 학습 효율을 극대화하기 위한 참고 리소스 (영상, 문서, GitHub 등)\n8) 내가 매일 해야 할 **단 한 줄 루틴**으로 압축 요약\n9) {{ $('Webhook').item.json.body.studyTime }}시간 동안 학습이 끝낼수 있도록 분석 해줘."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        736,
+        1008
+      ],
+      "id": "005952cc-fe35-45b6-9aae-02a4868e68c9",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "value": "={{ $json.body['내가배우고싶은것'] }} \\n {{ $json.body['학습설계요청목록'] }}",
+        "dataPropertyName": "hash"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        304,
+        784
+      ],
+      "id": "386da108-ebe4-4122-87ea-050bbff56c9d",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "knowledge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        784
+      ],
+      "id": "d3118d0c-7bc4-473b-b5a6-0fc131b7f36c",
+      "name": "Webhook",
+      "webhookId": "6fffeedc-1b3e-43fa-9e6a-a200f6ef0d3b",
+      "notes": "{\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"age\": 30,\n  \"address\": null\n}"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.data }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1584,
+        800
+      ],
+      "id": "5823fc27-a83c-4c63-aeba-fb06561c8718",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.outputformat }}",
+                    "rightValue": "html",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "60c808d5-b0ef-4b30-b338-5d6544f5e34d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "474b1522-83c9-4e7b-bb2b-822be276c6e3",
+                    "leftValue": "={{ $('Webhook').item.json.body.outputformat }}",
+                    "rightValue": "markdown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b245b50c-8167-4fef-8bce-80d7e609b501",
+                    "leftValue": "={{ $('Webhook').item.json.body.outputformat }}",
+                    "rightValue": "pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1056,
+        704
+      ],
+      "id": "a5bc5cbb-f641-4a35-880f-63617a721a85",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "model": "moonshotai/kimi-k2:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        752,
+        1168
+      ],
+      "id": "d9e4b193-7014-48bc-9265-82ad7453d390",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "BroWfy6H0GVqxhGy",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 학습 방법 생성\n### 설명\n학습할 주제, 상세 내역 등록하면 선택된 AI Model을 통해 체계적인 학습 시나리오를 생성하여 제공한다.\n\n### 상세내역\n- 제목, 상세 내역\n- AI Model\n- 학습 시간\n",
+        "height": 272,
+        "width": 528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        16,
+        352
+      ],
+      "id": "6e394422-a393-4887-8f5f-f94bc140d400",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "formTitle": "InputForm",
+        "formDescription": "학습하고자 하는 내용을 입력하면 상세하게 학습 방법등을 자세하게 알려줌",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "title",
+              "placeholder": "내가 배우고 싶은것",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "list",
+              "fieldType": "textarea",
+              "placeholder": "학습 설계 요청(목록 -)",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "ai_model",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "models/gemini-2.5-pro"
+                  },
+                  {
+                    "option": "models/gemini-2.0-flash"
+                  },
+                  {
+                    "option": "chatgpt"
+                  },
+                  {
+                    "option": "moonshotai/kimi-k2:free"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "study_time",
+              "fieldType": "number",
+              "placeholder": "학습시간",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "email",
+              "placeholder": "전달받을 Email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "output_format",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "html"
+                  },
+                  {
+                    "option": "markdown"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        48,
+        992
+      ],
+      "id": "13e426e3-7454-4e1f-bce0-6722e3416478",
+      "name": "InputForm",
+      "webhookId": "b8a75e76-ab9d-49b5-a379-198bd11c0407",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "n8n"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        720,
+        672
+      ],
+      "id": "831cddb1-b4f5-44d5-8aba-5c9700f74703",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "g63PhpP72tYoltLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "InputForm": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "1142d801-b66a-4d39-9bf1-05b251ac0ee9",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-12-07T12:27:18.501Z",
+      "createdAt": "2025-12-07T12:27:18.501Z",
+      "role": "workflow:owner",
+      "workflowId": "pWs9RjKQ9G7VLCxK",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "updatedAt": "2025-11-22T04:53:46.256Z",
+  "createdAt": "2025-11-20T01:22:07.025Z",
+  "id": "vELkFFmeZQEf9uZ9",
+  "name": "환율",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "환율"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        64,
+        0
+      ],
+      "id": "61782e59-3e93-43e3-803a-64d5e46bf34e",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "g63PhpP72tYoltLu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "exchangerate",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "ca175fa1-0897-469d-8acd-0f993f09d0ae",
+      "name": "Webhook",
+      "webhookId": "bc5e0431-e000-4b5a-bdff-37111d8d7567"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "ddfa4ab4-6d0d-4e74-b923-2b0d93eb2219",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c6d6a7a3-525c-42e8-aad8-b8c6d50e1cde",
+  "activeVersionId": "c6d6a7a3-525c-42e8-aad8-b8c6d50e1cde",
+  "versionCounter": 77,
+  "triggerCount": 1,
+  "tags": [
+    {
+      "updatedAt": "2025-11-16T13:11:00.958Z",
+      "createdAt": "2025-11-16T13:11:00.958Z",
+      "id": "B9UiztCWf1B18zoc",
+      "name": "증권"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2025-11-20T01:22:07.025Z",
+      "createdAt": "2025-11-20T01:22:07.025Z",
+      "role": "workflow:owner",
+      "workflowId": "vELkFFmeZQEf9uZ9",
+      "projectId": "bJKgRTAf6EX9J3jD",
+      "project": {
+        "updatedAt": "2025-10-13T04:56:40.026Z",
+        "createdAt": "2025-10-13T04:52:14.759Z",
+        "id": "bJKgRTAf6EX9J3jD",
+        "name": "Gon Kim <krdn.net@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}
